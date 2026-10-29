@@ -690,7 +690,7 @@ async function fetchLatestData() {
     CURRENT_USER.tasksCompleted = r.tasksCompleted;
     CURRENT_USER.nextTaskReqPoints = r.nextTaskReqPoints;
     CURRENT_USER.totalCommission = r.totalCommission;
-    CURRENT_USER.currentTaskCommission = r.currentTaskCommission || 0; // Store for VIP page
+    CURRENT_USER.currentTaskCommission = r.currentTaskCommission || 0;
 
     saveSession(CURRENT_USER);
     updateUI();
@@ -701,21 +701,15 @@ async function fetchLatestData() {
 
 // ⭐ Helper function to calculate VIP stats based on level
 function calculateVipStats(vipLevel, totalCommission) {
-  // Default values
   let commPercent = 1;
   let totalOrders = 5;
   
-  // Logic: VIP = 1%, VIP - 1 = 2%, VIP - 2 = 3%, VIP - 3 = 4%, VIP - 4 = 5%... 
-  // And Order count: VIP = 5, VIP - 1 = 10, VIP - 2 = 15, VIP - 3 = 20...
   const levelStr = String(vipLevel).toUpperCase();
-  if (levelStr.includes('-')) {
-    const parts = levelStr.split('-');
-    const levelNum = parseInt(parts[1].trim());
-    if (!isNaN(levelNum)) {
-      commPercent = levelNum + 1; 
-      totalOrders = (levelNum + 1) * 5;
-    }
-  }
+  
+  if (levelStr === 'VIP - 1') { commPercent = 2; totalOrders = 10; }
+  else if (levelStr === 'VIP - 2') { commPercent = 3; totalOrders = 18; }
+  else if (levelStr === 'VIP - 3') { commPercent = 4; totalOrders = 24; }
+  // You can add more levels here if needed
   
   const bonusAmount = totalCommission || 0;
   
