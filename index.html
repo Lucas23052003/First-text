@@ -152,6 +152,14 @@
   .vip-rules p { font-size: 11px; color: #aaa; line-height: 1.6; margin: 0 0 10px; }
   .vip-rules p:last-child { margin-bottom: 0; }
 
+  /* ===== PAGE 4: POINT REQUEST ===== */
+  .request-page { padding: 20px 16px; }
+  .request-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 20px; }
+  .request-card h3 { margin: 0 0 15px; font-size: 18px; color: var(--gold); text-align: center; }
+  .request-card label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; margin-top: 15px; }
+  .request-card input { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: #fff; font-size: 14px; }
+  .request-card .btn-submit { width: 100%; padding: 14px; background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; margin-top: 20px; cursor: pointer; }
+
   /* Bottom Nav */
   .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #111; border-top: 1px solid #2a2a2a; display: flex; justify-content: space-around; padding: 10px 0 15px; z-index: 999; }
   .nav-item { display: flex; flex-direction: column; align-items: center; color: #666; cursor: pointer; gap: 4px; }
@@ -340,6 +348,28 @@
     </div>
   </div>
 
+  <!-- ================= PAGE 4: POINT REQUEST ================= -->
+  <div id="page-request" class="page hidden">
+    <div class="top-header">
+      <div class="logo">● POINT REQUEST</div>
+      <div class="bell-icon">🔔</div>
+    </div>
+
+    <div class="request-page">
+      <div class="request-card">
+        <h3>Kumpletuhin ang Iyong Kahilingan</h3>
+        
+        <label>Pangalan:</label>
+        <input id="reqName" type="text" placeholder="Ilagay ang iyong pangalan">
+
+        <label>Halaga na Kailangan (₱):</label>
+        <input id="reqAmount" type="number" placeholder="Ilagay ang halaga">
+
+        <button class="btn-submit" onclick="submitPointRequest()">Isumite ang Kahilingan</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Bottom Navigation -->
   <div class="bottom-nav">
     <div class="nav-item" onclick="gotoPage('home')" id="nav-home">
@@ -376,7 +406,6 @@
       </div>
     </div>
 
-    <!-- Changed to show actual commission -->
     <div class="modal-row"><span>presyo</span> <span>₱ <span id="omPrice">0</span></span></div>
     <div class="modal-row"><span>bilang ng produkto</span> <span>1</span></div>
     <div class="modal-row"><span>kabuuang halaga</span> <span>₱ <span id="omTotal">0</span></span></div>
@@ -403,7 +432,7 @@
       Kulang ang balanse ng iyong account,<br>
       <span id="missingAmtText">₱0.00</span> ang kulang
     </div>
-    <button class="alert-btn" onclick="closeInsufficientModal()">queding</button>
+    <button class="alert-btn" onclick="goToPointRequest()">OK</button>
   </div>
 </div>
 
@@ -412,6 +441,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbwM0fTSH3KilMBaRBTbdmHD
 let CURRENT_USER = null;
 let AUTO_REFRESH_INTERVAL = null;
 let CURRENT_TASK_DATA = null;
+let MISSING_AMOUNT = 0; // Keep track of missing amount for request page
 
 const LS_KEY = 'userSession';
 const SESSION_HOURS = 18;
@@ -511,6 +541,10 @@ function gotoPage(pageName) {
   if(pageName === 'home') document.getElementById('nav-home').classList.add('active');
   else if(pageName === 'orders') document.getElementById('nav-orders').classList.add('active');
   else if(pageName === 'vip') document.getElementById('nav-vip').classList.add('active');
+  else if(pageName === 'request') {
+    // No specific nav active for request, maybe keep vip active or none
+    document.getElementById('nav-vip').classList.add('active');
+  }
 
   setTimeout(() => { toggleLoader(false); }, 400); 
 }
@@ -567,22 +601,20 @@ async function renderOrders() {
   const btnConfirm = document.getElementById('btnConfirmOrder');
 
   if (CURRENT_USER.tasksInProgress > 0) {
-    // Fetch the current task data (which includes the fixed image and commission)
     const r = await api('getUserData', { userId: CURRENT_USER.userId }); 
     if (r && r.ok) {
-      // 🔥 Generate a random price between 100 and 999
       const randomPrice = Math.floor(Math.random() * 900) + 100; 
       
       CURRENT_TASK_DATA = {
         price: randomPrice, 
         comm: r.currentTaskCommission, 
-        title: 'Pagbili at pagbebenta ng mga bagay na muling ibebenta',
-        id: '#TR-404-Special-items',
-        img: r.currentTaskImage // Use the saved image
+        title: 'BIOEYE L.Fairy Destiny 16.2MM Power 0-8.50 Korean Color Contact Lens',
+        id: '#ORD-UB2610281544523157',
+        img: r.currentTaskImage
       };
       
       container.innerHTML = `
-        <div class="order-card">
+        <div class="order-card" onclick="checkPointsBeforeConfirm()">
           <img src="${CURRENT_TASK_DATA.img}" class="order-img">
           <div class="order-details">
             <div class="order-title">${CURRENT_TASK_DATA.title}</div>
@@ -614,14 +646,13 @@ async function fetchCompletedTasks() {
       return;
     }
 
-    // Display completed tasks with their saved images
     r.list.forEach((t) => {
       const div = document.createElement('div');
       div.className = 'order-card';
       div.innerHTML = `
         <img src="${t.image || 'https://picsum.photos/seed/bag1/100/100'}" class="order-img">
         <div class="order-details">
-          <div class="order-title">Pagbili at pagbebenta ng mga bagay na muling ibebenta</div>
+          <div class="order-title">BIOEYE L.Fairy Destiny 16.2MM Power 0-8.50 Korean Color Contact Lens</div>
           <div class="order-id">#ORD-UB2610281544523157</div>
           <div class="order-price">₱ ${t.commission}</div>
           <div class="order-status" style="color:var(--success);"><div class="dot" style="background:var(--success);"></div> Tapos na</div>
@@ -632,13 +663,23 @@ async function fetchCompletedTasks() {
   }
 }
 
+// ⭐ New function to check points before confirming order
+function checkPointsBeforeConfirm() {
+  if (CURRENT_USER.points < CURRENT_USER.nextTaskReqPoints) {
+    MISSING_AMOUNT = CURRENT_USER.nextTaskReqPoints - CURRENT_USER.points;
+    showInsufficientModal(MISSING_AMOUNT);
+  } else {
+    showOrderModal();
+  }
+}
+
 function showOrderModal() {
   document.getElementById('omImg').src = CURRENT_TASK_DATA.img;
   document.getElementById('omTitle').textContent = CURRENT_TASK_DATA.title;
   document.getElementById('omIndex').textContent = CURRENT_USER.currentTaskIndex;
   document.getElementById('omPrice').textContent = CURRENT_TASK_DATA.price;
   document.getElementById('omTotal').textContent = CURRENT_TASK_DATA.price;
-  document.getElementById('omComm').textContent = CURRENT_TASK_DATA.comm; // Display the actual commission
+  document.getElementById('omComm').textContent = CURRENT_TASK_DATA.comm;
   document.getElementById('orderConfirmModal').classList.remove('hidden');
 }
 function closeOrderModal() { document.getElementById('orderConfirmModal').classList.add('hidden'); }
@@ -668,8 +709,20 @@ async function startNextTask() {
     fetchLatestData();
     gotoPage('orders');
   } else {
-    if (r.msg === 'Points not enough') {
-      showInsufficientModal(r.needPoints);
+    // ⭐ ဒီနေရာမှာ Point မလုံလောက်ရင် Popup မပြတော့ဘဲ အလုပ်ကို ယူခွင့်ပြုမယ်
+    if (r.msg.includes("Points not enough")) {
+       showToast('Kailangan mo ng points para tapusin ang gawain.', true);
+       // Optionally, you can still start the task but show the popup when they try to confirm
+       // For now, let's just show a toast and let them try to start again (or we can force start)
+       // Let's force start the task even if points are not enough, but popup will appear on confirm
+       const forceR = await api('forceStartTask', { userId: CURRENT_USER.userId });
+       if(forceR.ok) {
+         showToast('Matagumpay na nasimulan ang gawain!');
+         fetchLatestData();
+         gotoPage('orders');
+       } else {
+         showToast(forceR.msg, true);
+       }
     } else if (r.msg.includes("You already have a task in progress")) {
       showToast("Mauna mong tapusin ang kasalukuyang order.", true);
       gotoPage('orders');
@@ -679,12 +732,61 @@ async function startNextTask() {
   }
 }
 
+// Function to force start task (bypassing point check on backend) for UI flow
+async function forceStartTask() {
+   const r = await api('startTaskForce', { userId: CURRENT_USER.userId });
+   if(r.ok) {
+     showToast('Matagumpay na nasimulan ang gawain!');
+     fetchLatestData();
+     gotoPage('orders');
+   } else {
+     showToast(r.msg, true);
+   }
+}
+
 function showInsufficientModal(amount) {
   document.getElementById('missingAmtText').textContent = '₱ ' + Number(amount).toFixed(2);
   document.getElementById('insufficientModal').classList.remove('hidden');
 }
+
+function goToPointRequest() {
+  closeInsufficientModal();
+  document.getElementById('reqName').value = CURRENT_USER.name || '';
+  document.getElementById('reqAmount').value = MISSING_AMOUNT.toFixed(2);
+  gotoPage('request');
+}
+
 function closeInsufficientModal() { 
   document.getElementById('insufficientModal').classList.add('hidden'); 
+}
+
+// ================== Page 4: Point Request Logic ==================
+async function submitPointRequest() {
+  const name = document.getElementById('reqName').value.trim();
+  const amount = parseFloat(document.getElementById('reqAmount').value);
+
+  if (!name || isNaN(amount) || amount <= 0) {
+    showToast('Mangyaring punan ang lahat ng field nang tama.', true);
+    return;
+  }
+
+  toggleLoader(true);
+  const r = await api('submitPointRequest', {
+    userId: CURRENT_USER.userId,
+    name: name,
+    phone: CURRENT_USER.phone,
+    amount: amount
+  });
+  toggleLoader(false);
+
+  if (r.ok) {
+    showToast('Matagumpay na naisumite ang kahilingan! Hintayin ang approval ng admin.');
+    setTimeout(() => {
+        gotoPage('vip'); // Go back to VIP page after request
+    }, 2000);
+  } else {
+    showToast(r.msg, true);
+  }
 }
 
 // ================== Auto Refresh & Utils ==================
