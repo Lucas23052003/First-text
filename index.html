@@ -106,9 +106,9 @@
   
   .btn-order-action { width: calc(100% - 32px); margin: 0 16px 20px; padding: 12px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; }
 
-  /* Modal */
-  .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: flex-end; }
-  .modal-content { background: #141414; width: 100%; border-radius: 20px 20px 0 0; padding: 20px; border: 1px solid #2a2a2a; border-bottom: none; }
+  /* Modal for Task */
+  .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; justify-content: center; align-items: center; padding: 20px; }
+  .modal-content { background: #141414; width: 100%; max-width: 400px; border-radius: 20px; padding: 20px; border: 1px solid #2a2a2a; }
   .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #2a2a2a; padding-bottom: 10px; }
   .modal-title { font-size: 16px; font-weight: bold; }
   .close-btn { background: #2a2a2a; border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; }
@@ -213,9 +213,9 @@
 
     <div class="home-balance-card">
       <div class="hbc-top">
-        <div class="hbc-label">💳 MY BALANCE</div>
+        <div class="hbc-label">💳 AKING BALANSE</div>
         <div class="hbc-vip">
-          <div class="hbc-vip-title">MEMBERSHIP LEVEL</div>
+          <div class="hbc-vip-title">ANTAS NG KASAPI</div>
           <div class="hbc-vip-level" id="vipBadge">VIP3</div>
         </div>
       </div>
@@ -227,43 +227,43 @@
       
       <div class="hbc-stats">
         <div class="hbc-stat">
-          <label>Today's commission</label>
+          <label>Komisyon Ngayon</label>
           <div id="homeComm">₱ 0</div>
         </div>
         <div class="hbc-stat">
-          <label>gain</label>
+          <label>Kita</label>
           <div id="homeGain">₱ 0</div>
         </div>
         <div class="hbc-stat">
-          <label>Earnings Today</label>
+          <label>Kita Ngayon</label>
           <div id="homeEarn">₱ 0</div>
         </div>
       </div>
       
       <div class="hbc-actions">
-        <button class="hbc-btn hbc-btn-gold" onclick="gotoPage('vip')">⚡ start making money</button>
-        <button class="hbc-btn hbc-btn-dark" onclick="showToast('Recharge coming soon')">💳 Recharge</button>
+        <button class="hbc-btn hbc-btn-gold" onclick="gotoPage('vip')">⚡ Simulan ang pag-kita</button>
+        <button class="hbc-btn hbc-btn-dark" onclick="showToast('Recharge coming soon')">💳 Mag-recharge</button>
       </div>
     </div>
 
     <div class="section-header">
       <div class="section-title">homepage</div>
-      <div class="section-link">START MAKING MONEY</div>
+      <div class="section-link">SIMULAN ANG PAG-KITA</div>
     </div>
     <div class="qa-grid">
-      <div class="qa-card" onclick="showToast('Recharge coming soon')"><div class="qa-icon">💰</div><div class="qa-text">Recharge</div></div>
-      <div class="qa-card" onclick="showToast('Withdraw coming soon')"><div class="qa-icon">💸</div><div class="qa-text">Withdraw</div></div>
-      <div class="qa-card" onclick="showToast('Customer Service coming soon')"><div class="qa-icon">🎧</div><div class="qa-text">Customer Service</div></div>
-      <div class="qa-card" onclick="showToast('System Notification coming soon')"><div class="qa-icon">🔔</div><div class="qa-text">System notification</div></div>
+      <div class="qa-card" onclick="showToast('Recharge coming soon')"><div class="qa-icon">💰</div><div class="qa-text">Mag-recharge</div></div>
+      <div class="qa-card" onclick="showToast('Withdraw coming soon')"><div class="qa-icon">💸</div><div class="qa-text">Mag-withdraw</div></div>
+      <div class="qa-card" onclick="showToast('Customer Service coming soon')"><div class="qa-icon">🎧</div><div class="qa-text">Serbisyo sa Customer</div></div>
+      <div class="qa-card" onclick="showToast('System Notification coming soon')"><div class="qa-icon">🔔</div><div class="qa-text">Abiso ng System</div></div>
     </div>
 
     <div class="section-header">
-      <div class="section-title">gain</div>
-      <div class="section-link">EARNINGS TODAY</div>
+      <div class="section-title">kita</div>
+      <div class="section-link">KITA NGAYON</div>
     </div>
     <div class="gain-grid">
-      <div class="gain-card"><label>Today's commission</label><div>₱ 6663.2</div></div>
-      <div class="gain-card"><label>gain</label><div>₱ 13035.12</div></div>
+      <div class="gain-card"><label>Komisyon Ngayon</label><div id="gainCommDisplay">₱ 0</div></div>
+      <div class="gain-card"><label>Kita</label><div id="gainTotalDisplay">₱ 0</div></div>
     </div>
   </div>
 
@@ -287,15 +287,7 @@
       <button id="btnConfirmOrder" class="btn-order-action hidden" onclick="showOrderModal()">task_tj</button>
       
       <div id="completedOrderContainer">
-        <div class="order-card">
-          <img src="https://picsum.photos/seed/bag1/100/100" class="order-img">
-          <div class="order-details">
-            <div class="order-title">BIOEYE L.Fairy Destiny 16.2MM Power 0-8.50 Korean Color Contact Lens</div>
-            <div class="order-id">#ORD-UB2610281544523157</div>
-            <div class="order-price">TRY 23,839.23</div>
-            <div class="order-status" style="color:var(--success);"><div class="dot" style="background:var(--success);"></div> task_tab5</div>
-          </div>
-        </div>
+        <!-- Rendered via JS -->
       </div>
     </div>
   </div>
@@ -309,8 +301,8 @@
 
     <div style="padding: 0 16px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
       <div>
-        <div style="font-size: 24px; font-weight: bold; color: #fff;">TRY<span id="vipPageBalance">0</span></div>
-        <div style="font-size: 12px; color: #888;">Hesap bakiyesi</div>
+        <div style="font-size: 24px; font-weight: bold; color: #fff;">₱ <span id="vipPageBalance">0</span></div>
+        <div style="font-size: 12px; color: #888;">Balanse ng account</div>
       </div>
       <div style="width: 40px; height: 40px; background: #d4af37; border-radius: 10px; display: flex; justify-content: center; align-items: center; color: #000; font-size: 20px; font-weight: bold;">+</div>
     </div>
@@ -320,31 +312,31 @@
         <div class="vmc-level">VIP3</div>
         <div class="vmc-bonus">
           <div style="font-size: 8px; text-transform: uppercase;">Bonus</div>
-          <div style="font-size: 12px;">TRY 0.00</div>
+          <div style="font-size: 12px;">₱ 0.00</div>
         </div>
       </div>
-      <div class="vmc-desc">Komisyon 1% | 5 Sipariş</div>
+      <div class="vmc-desc">Komisyon 1% | 5 Order</div>
       
       <div class="vmc-stats">
-        <div class="vmc-stat"><div id="vipTasksCompleted">4</div><label>Tamamlandı</label></div>
-        <div class="vmc-stat"><div id="vipTasksTotal">5</div><label>Tümü</label></div>
-        <div class="vmc-stat"><div id="vipTasksRemaining">1</div><label>Eksik</label></div>
+        <div class="vmc-stat"><div id="vipTasksCompleted">4</div><label>Tapos na</label></div>
+        <div class="vmc-stat"><div id="vipTasksTotal">5</div><label>Lahat</label></div>
+        <div class="vmc-stat"><div id="vipTasksRemaining">1</div><label>Kulang</label></div>
       </div>
       
       <div class="vmc-avail">
-        <span id="vipOrderCount">4</span><br>Sipariş sayısı
-        <strong>TRY<span id="vipPageBalance2">0</span></strong>
-        Kullanılabilir bakiye
+        <span id="vipOrderCount">4</span><br>Bilang ng order
+        <strong>₱ <span id="vipPageBalance2">0</span></strong>
+        Magagamit na balanse
       </div>
       
-      <button class="vmc-start-btn" onclick="startNextTask()">SİPARİŞ ALMAYA BAŞLA</button>
+      <button class="vmc-start-btn" onclick="startNextTask()">SIMULAN ANG PAGKUHA NG ORDER</button>
     </div>
 
     <div class="vip-rules">
-      <h4>GÖREV TAMAMLAMA TALİMATLARI</h4>
-      <p>1. Aynı gün içerisinde art arda üç görevi tamamlayarak 8.800 TRY tutarında ödül kazanın ✅ ✅</p>
-      <p>2. Bu üç görevi başarıyla tamamladıktan sonra tam zamanlı çalışan statüsüne geçme fırsatına sahip olacaksınız. Tam zamanlı çalışanlar, her ayın ilk gününde 60.000 TRY tutarında sabit maaş ödenecektir ✅ ✅</p>
-      <p>3. Tam zamanlı pozisyonlar için günlük kontenjan sınırı bulunmamaktadır. Lütfen verilen talimatları dikkatle takip edin.</p>
+      <h4>MGA TAGUBILIN SA PAGKUMPLETO NG GAWAIN</h4>
+      <p>1. Sa loob ng parehong araw, kumpletuhin ang tatlong magkakasunod na gawain upang makakuha ng premyo na nagkakahalaga ng 8,800 TRY ✅ ✅</p>
+      <p>2. Pagkatapos mong matagumpay na makumpleto ang tatlong gawaing ito, magkakaroon ka ng pagkakataong maging isang full-time na empleyado. Ang mga full-time na empleyado ay babayaran ng fixed salary na 60,000 TRY sa unang araw ng bawat buwan ✅ ✅</p>
+      <p>3. Walang limitasyon sa pang-araw-araw na quota para sa mga full-time na posisyon. Mangyaring sundin nang mabuti ang mga ibinigay na tagubilin.</p>
     </div>
   </div>
 
@@ -368,7 +360,7 @@
   </div>
 </div>
 
-<!-- Modal for Confirming Order -->
+<!-- Modal for Confirming Order (NEW) -->
 <div id="orderConfirmModal" class="modal-overlay hidden">
   <div class="modal-content">
     <div class="modal-header">
@@ -384,16 +376,17 @@
       </div>
     </div>
 
-    <div class="modal-row"><span>price</span> <span>₱ <span id="omPrice">0</span></span></div>
-    <div class="modal-row"><span>goods_num</span> <span>1</span></div>
-    <div class="modal-row"><span>task_all_money</span> <span>₱ <span id="omTotal">0</span></span></div>
+    <!-- Changed to show actual commission -->
+    <div class="modal-row"><span>presyo</span> <span>₱ <span id="omPrice">0</span></span></div>
+    <div class="modal-row"><span>bilang ng produkto</span> <span>1</span></div>
+    <div class="modal-row"><span>kabuuang halaga</span> <span>₱ <span id="omTotal">0</span></span></div>
     
     <div class="modal-total">
-      <div>commission</div>
+      <div>komisyon (Random)</div>
       <div class="row2">₱ <span id="omComm">0</span></div>
     </div>
 
-    <div class="modal-row" style="margin-top: 15px;"><span>order_pin</span> <span></span></div>
+    <div class="modal-row" style="margin-top: 15px;"><span>PIN ng order</span> <span></span></div>
     <input type="password" placeholder="pin1" style="width:100%; padding:12px; background:#1f1f1f; border:1px solid #333; border-radius:8px; color:#fff; margin-top:5px;">
 
     <div class="modal-actions">
@@ -407,8 +400,8 @@
 <div id="insufficientModal" class="custom-alert hidden">
   <div class="alert-box">
     <div class="alert-text">
-      Hesap bakiyeniz yetersiz,<br>
-      <span id="missingAmtText">₱0.00</span> eksik
+      Kulang ang balanse ng iyong account,<br>
+      <span id="missingAmtText">₱0.00</span> ang kulang
     </div>
     <button class="alert-btn" onclick="closeInsufficientModal()">queding</button>
   </div>
@@ -475,7 +468,7 @@ async function doRegister() {
   const r = await api('register', data);
   toggleLoader(false);
   if(r.ok) {
-    showToast('Registration successful! Please login.');
+    showToast('Matagumpay ang pagpaparehistro! Mangyaring mag-login.');
     setTimeout(() => {
       document.getElementById('lPhone').value = data.phone;
       showLogin();
@@ -535,9 +528,11 @@ async function fetchLatestData() {
     CURRENT_USER.tasksInProgress = r.tasksInProgress;
     CURRENT_USER.tasksCompleted = r.tasksCompleted;
     CURRENT_USER.nextTaskReqPoints = r.nextTaskReqPoints;
+    CURRENT_USER.totalCommission = r.totalCommission;
 
     saveSession(CURRENT_USER);
     updateUI();
+    fetchCompletedTasks();
   }
 }
 
@@ -545,6 +540,12 @@ function updateUI() {
   // Home
   document.getElementById('homeBalance').textContent = CURRENT_USER.points;
   document.getElementById('vipBadge').textContent = CURRENT_USER.vipLevel;
+  document.getElementById('homeComm').textContent = '₱ ' + (CURRENT_USER.totalCommission || 0);
+  document.getElementById('homeGain').textContent = '₱ ' + (CURRENT_USER.totalCommission || 0);
+  document.getElementById('homeEarn').textContent = '₱ ' + (CURRENT_USER.totalCommission || 0);
+
+  document.getElementById('gainCommDisplay').textContent = '₱ ' + (CURRENT_USER.totalCommission || 0);
+  document.getElementById('gainTotalDisplay').textContent = '₱ ' + (CURRENT_USER.totalCommission || 0);
   
   // VIP Page
   document.getElementById('vipPageBalance').textContent = CURRENT_USER.points;
@@ -561,24 +562,34 @@ function updateUI() {
 }
 
 // ================== Page 2: Orders Logic ==================
-function renderOrders() {
+async function renderOrders() {
   const container = document.getElementById('activeOrderContainer');
   const btnConfirm = document.getElementById('btnConfirmOrder');
 
   if (CURRENT_USER.tasksInProgress > 0) {
-    CURRENT_TASK_DATA = { price: 23839.23, comm: 35758.84, title: 'BIOEYE L.Fairy Destiny 16.2MM Power 0-8.50 Korean Color Contact Lens', id: '#ORD-UB2610281544523157' };
-    
-    container.innerHTML = `
-      <div class="order-card">
-        <img src="https://picsum.photos/seed/bag1/100/100" class="order-img">
-        <div class="order-details">
-          <div class="order-title">${CURRENT_TASK_DATA.title}</div>
-          <div class="order-id">${CURRENT_TASK_DATA.id}</div>
-          <div class="order-price">₱ ${CURRENT_TASK_DATA.price}</div>
+    // Fetch the current task data (which includes the fixed image and commission)
+    const r = await api('getUserData', { userId: CURRENT_USER.userId }); 
+    if (r && r.ok) {
+      CURRENT_TASK_DATA = {
+        price: 23839.23, // Dummy price
+        comm: r.currentTaskCommission, 
+        title: 'BIOEYE L.Fairy Destiny 16.2MM Power 0-8.50 Korean Color Contact Lens',
+        id: '#ORD-UB2610281544523157',
+        img: r.currentTaskImage // Use the saved image
+      };
+      
+      container.innerHTML = `
+        <div class="order-card">
+          <img src="${CURRENT_TASK_DATA.img}" class="order-img">
+          <div class="order-details">
+            <div class="order-title">${CURRENT_TASK_DATA.title}</div>
+            <div class="order-id">${CURRENT_TASK_DATA.id}</div>
+            <div class="order-price">₱ ${CURRENT_TASK_DATA.price}</div>
+          </div>
         </div>
-      </div>
-    `;
-    btnConfirm.classList.remove('hidden');
+      `;
+      btnConfirm.classList.remove('hidden');
+    }
   } else {
     container.innerHTML = `
       <div style="text-align:center; padding: 40px 20px;">
@@ -590,13 +601,41 @@ function renderOrders() {
   }
 }
 
+async function fetchCompletedTasks() {
+  const r = await api('getUserCompletedTasks', { userId: CURRENT_USER.userId });
+  if (r && r.ok) {
+    const container = document.getElementById('completedOrderContainer');
+    container.innerHTML = '';
+    if(r.list.length === 0) {
+      container.innerHTML = '<p style="text-align:center; color:#888; padding:20px;">Wala pang natapos na order.</p>';
+      return;
+    }
+
+    // Display completed tasks with their saved images
+    r.list.forEach((t) => {
+      const div = document.createElement('div');
+      div.className = 'order-card';
+      div.innerHTML = `
+        <img src="${t.image || 'https://picsum.photos/seed/bag1/100/100'}" class="order-img">
+        <div class="order-details">
+          <div class="order-title">BIOEYE L.Fairy Destiny 16.2MM Power 0-8.50 Korean Color Contact Lens</div>
+          <div class="order-id">#ORD-UB2610281544523157</div>
+          <div class="order-price">₱ ${t.commission}</div>
+          <div class="order-status" style="color:var(--success);"><div class="dot" style="background:var(--success);"></div> Tapos na</div>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+}
+
 function showOrderModal() {
-  document.getElementById('omImg').src = 'https://picsum.photos/seed/bag1/100/100';
+  document.getElementById('omImg').src = CURRENT_TASK_DATA.img;
   document.getElementById('omTitle').textContent = CURRENT_TASK_DATA.title;
   document.getElementById('omIndex').textContent = CURRENT_USER.currentTaskIndex;
   document.getElementById('omPrice').textContent = CURRENT_TASK_DATA.price;
   document.getElementById('omTotal').textContent = CURRENT_TASK_DATA.price;
-  document.getElementById('omComm').textContent = CURRENT_TASK_DATA.comm;
+  document.getElementById('omComm').textContent = CURRENT_TASK_DATA.comm; // Display the actual commission
   document.getElementById('orderConfirmModal').classList.remove('hidden');
 }
 function closeOrderModal() { document.getElementById('orderConfirmModal').classList.add('hidden'); }
@@ -607,7 +646,7 @@ async function submitOrder() {
   const r = await api('completeTask', { userId: CURRENT_USER.userId });
   toggleLoader(false);
   if (r.ok) {
-    showToast('Task completed! Earned: ₱' + r.earned); // 👈 အခုဆို 0 မဟုတ်တော့ဘူး
+    showToast('Nakumpleto ang gawain! Kumita ng: ₱' + r.earned); 
     fetchLatestData();
     gotoPage('vip');
   } else {
@@ -622,7 +661,7 @@ async function startNextTask() {
   toggleLoader(false);
   
   if (r.ok) {
-    showToast('Task started successfully!');
+    showToast('Matagumpay na nasimulan ang gawain!');
     fetchLatestData();
     gotoPage('orders');
   } else {
