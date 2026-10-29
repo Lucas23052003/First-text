@@ -570,7 +570,7 @@ async function renderOrders() {
     // Fetch the current task data (which includes the fixed image and commission)
     const r = await api('getUserData', { userId: CURRENT_USER.userId }); 
     if (r && r.ok) {
-      // Generate a random price between 100 and 999
+      // 🔥 Generate a random price between 100 and 999
       const randomPrice = Math.floor(Math.random() * 900) + 100; 
       
       CURRENT_TASK_DATA = {
