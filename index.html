@@ -139,7 +139,8 @@
   .vip-main-card { margin: 0 16px; background: var(--card-bg); border: 1px solid #332a12; border-radius: 16px; padding: 20px; }
   .vmc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
   .vmc-level { font-size: 20px; font-weight: bold; color: var(--gold); }
-  .vmc-bonus { background: #2a2212; border: 1px solid #443714; padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; color: var(--gold); }
+  .vmc-bonus { background: #2a2212; border: 1px solid #443714; padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; color: var(--gold); text-align: right; }
+  .vmc-bonus-label { font-size: 8px; text-transform: uppercase; display: block; margin-bottom: 2px; }
   .vmc-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; }
   
   .vmc-stats { display: flex; justify-content: space-around; text-align: center; margin-bottom: 20px; border-top: 1px solid #2a2a2a; border-bottom: 1px solid #2a2a2a; padding: 15px 0; }
@@ -258,7 +259,7 @@
         <div class="hbc-label">💳 AKING BALANSE</div>
         <div class="hbc-vip">
           <div class="hbc-vip-title">ANTAS NG KASAPI</div>
-          <div class="hbc-vip-level" id="vipBadge">VIP3</div>
+          <div class="hbc-vip-level" id="vipBadge">VIP</div>
         </div>
       </div>
       
@@ -358,22 +359,22 @@
 
     <div class="vip-main-card">
       <div class="vmc-top">
-        <div class="vmc-level">VIP3</div>
+        <div class="vmc-level" id="vipLevelDisplay">VIP</div>
         <div class="vmc-bonus">
-          <div style="font-size: 8px; text-transform: uppercase;">Bonus</div>
-          <div style="font-size: 12px;">₱ 0.00</div>
+          <span class="vmc-bonus-label">Bonus</span>
+          <span id="vipBonusDisplay">₱ 0.00</span>
         </div>
       </div>
-      <div class="vmc-desc">Komisyon 1% | 5 Order</div>
+      <div class="vmc-desc" id="vipCommissionInfo">Komisyon 1% | 5 Order</div>
       
       <div class="vmc-stats">
-        <div class="vmc-stat"><div id="vipTasksCompleted">4</div><label>Tapos na</label></div>
-        <div class="vmc-stat"><div id="vipTasksTotal">5</div><label>Lahat</label></div>
-        <div class="vmc-stat"><div id="vipTasksRemaining">1</div><label>Kulang</label></div>
+        <div class="vmc-stat"><div id="vipTasksCompleted">0</div><label>Tapos na</label></div>
+        <div class="vmc-stat"><div id="vipTasksTotal">0</div><label>Lahat</label></div>
+        <div class="vmc-stat"><div id="vipTasksRemaining">0</div><label>Kulang</label></div>
       </div>
       
       <div class="vmc-avail">
-        <span id="vipOrderCount">4</span><br>Bilang ng order
+        <span id="vipOrderCount">0</span><br>Bilang ng order
         <strong>₱ <span id="vipPageBalance2">0</span></strong>
         Magagamit na balanse
       </div>
@@ -689,12 +690,36 @@ async function fetchLatestData() {
     CURRENT_USER.tasksCompleted = r.tasksCompleted;
     CURRENT_USER.nextTaskReqPoints = r.nextTaskReqPoints;
     CURRENT_USER.totalCommission = r.totalCommission;
+    CURRENT_USER.currentTaskCommission = r.currentTaskCommission || 0; // Store for VIP page
 
     saveSession(CURRENT_USER);
     updateUI();
     fetchCompletedTasks();
     fetchNotificationsCount();
   }
+}
+
+// ⭐ Helper function to calculate VIP stats based on level
+function calculateVipStats(vipLevel, totalCommission) {
+  // Default values
+  let commPercent = 1;
+  let totalOrders = 5;
+  
+  // Logic: VIP = 1%, VIP - 1 = 2%, VIP - 2 = 3%, VIP - 3 = 4%, VIP - 4 = 5%... 
+  // And Order count: VIP = 5, VIP - 1 = 10, VIP - 2 = 15, VIP - 3 = 20...
+  const levelStr = String(vipLevel).toUpperCase();
+  if (levelStr.includes('-')) {
+    const parts = levelStr.split('-');
+    const levelNum = parseInt(parts[1].trim());
+    if (!isNaN(levelNum)) {
+      commPercent = levelNum + 1; 
+      totalOrders = (levelNum + 1) * 5;
+    }
+  }
+  
+  const bonusAmount = totalCommission || 0;
+  
+  return { commPercent, totalOrders, bonusAmount };
 }
 
 function updateUI() {
@@ -716,13 +741,19 @@ function updateUI() {
     document.getElementById('frozenDisplay').classList.add('hidden');
   }
 
-  // VIP Page
+  // VIP Page - Dynamic Update
+  const stats = calculateVipStats(CURRENT_USER.vipLevel, CURRENT_USER.totalCommission);
+  
+  document.getElementById('vipLevelDisplay').textContent = CURRENT_USER.vipLevel;
+  document.getElementById('vipBonusDisplay').textContent = '₱ ' + stats.bonusAmount.toFixed(2);
+  document.getElementById('vipCommissionInfo').textContent = `Komisyon ${stats.commPercent}% | ${stats.totalOrders} Order`;
+  
   document.getElementById('vipPageBalance').textContent = CURRENT_USER.points;
   document.getElementById('vipPageBalance2').textContent = CURRENT_USER.points;
   
   // Task Counts
   document.getElementById('vipTasksCompleted').textContent = CURRENT_USER.tasksCompleted;
-  document.getElementById('vipTasksTotal').textContent = CURRENT_USER.tasksTotal;
+  document.getElementById('vipTasksTotal').textContent = stats.totalOrders;
   document.getElementById('vipTasksRemaining').textContent = CURRENT_USER.tasksRemaining;
   document.getElementById('vipOrderCount').textContent = CURRENT_USER.tasksCompleted;
 
@@ -954,7 +985,7 @@ async function submitWithdrawal() {
 async function fetchNotificationsCount() {
   const r = await api('getNotifications', { userId: CURRENT_USER.userId });
   if (r && r.ok) {
-    UNREAD_NOTI_COUNT = r.list.length; // Simple count, assumes all fetched are unread
+    UNREAD_NOTI_COUNT = r.list.length; 
     updateNotificationBadges();
   }
 }
