@@ -95,7 +95,7 @@
   .order-tab { padding: 8px 16px; border-radius: 20px; font-size: 12px; white-space: nowrap; border: 1px solid var(--card-border); background: transparent; color: var(--text-muted); cursor: pointer; }
   .order-tab.active { background: var(--gold); color: #000; border-color: var(--gold); font-weight: bold; }
   
-  .order-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 15px; margin: 0 16px 12px; display: flex; gap: 12px; position: relative; }
+  .order-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 15px; margin: 0 16px 12px; display: flex; gap: 12px; position: relative; cursor: pointer; }
   .order-img { width: 70px; height: 70px; border-radius: 10px; object-fit: cover; border: 1px solid #333; }
   .order-details { flex: 1; }
   .order-title { font-size: 13px; font-weight: bold; line-height: 1.4; margin-bottom: 4px; }
@@ -292,7 +292,7 @@
 
     <div style="padding: 0;">
       <div id="activeOrderContainer"></div>
-      <button id="btnConfirmOrder" class="btn-order-action hidden" onclick="showOrderModal()">task_tj</button>
+      <button id="btnConfirmOrder" class="btn-order-action hidden" onclick="checkPointsBeforeConfirm()">task_tj</button>
       
       <div id="completedOrderContainer">
         <!-- Rendered via JS -->
@@ -441,7 +441,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbwM0fTSH3KilMBaRBTbdmHD
 let CURRENT_USER = null;
 let AUTO_REFRESH_INTERVAL = null;
 let CURRENT_TASK_DATA = null;
-let MISSING_AMOUNT = 0; // Keep track of missing amount for request page
+let MISSING_AMOUNT = 0;
 
 const LS_KEY = 'userSession';
 const SESSION_HOURS = 18;
@@ -541,10 +541,7 @@ function gotoPage(pageName) {
   if(pageName === 'home') document.getElementById('nav-home').classList.add('active');
   else if(pageName === 'orders') document.getElementById('nav-orders').classList.add('active');
   else if(pageName === 'vip') document.getElementById('nav-vip').classList.add('active');
-  else if(pageName === 'request') {
-    // No specific nav active for request, maybe keep vip active or none
-    document.getElementById('nav-vip').classList.add('active');
-  }
+  else if(pageName === 'request') document.getElementById('nav-vip').classList.add('active');
 
   setTimeout(() => { toggleLoader(false); }, 400); 
 }
@@ -709,39 +706,13 @@ async function startNextTask() {
     fetchLatestData();
     gotoPage('orders');
   } else {
-    // ⭐ ဒီနေရာမှာ Point မလုံလောက်ရင် Popup မပြတော့ဘဲ အလုပ်ကို ယူခွင့်ပြုမယ်
-    if (r.msg.includes("Points not enough")) {
-       showToast('Kailangan mo ng points para tapusin ang gawain.', true);
-       // Optionally, you can still start the task but show the popup when they try to confirm
-       // For now, let's just show a toast and let them try to start again (or we can force start)
-       // Let's force start the task even if points are not enough, but popup will appear on confirm
-       const forceR = await api('forceStartTask', { userId: CURRENT_USER.userId });
-       if(forceR.ok) {
-         showToast('Matagumpay na nasimulan ang gawain!');
-         fetchLatestData();
-         gotoPage('orders');
-       } else {
-         showToast(forceR.msg, true);
-       }
-    } else if (r.msg.includes("You already have a task in progress")) {
+    if (r.msg.includes("You already have a task in progress")) {
       showToast("Mauna mong tapusin ang kasalukuyang order.", true);
       gotoPage('orders');
     } else {
       showToast(r.msg, true);
     }
   }
-}
-
-// Function to force start task (bypassing point check on backend) for UI flow
-async function forceStartTask() {
-   const r = await api('startTaskForce', { userId: CURRENT_USER.userId });
-   if(r.ok) {
-     showToast('Matagumpay na nasimulan ang gawain!');
-     fetchLatestData();
-     gotoPage('orders');
-   } else {
-     showToast(r.msg, true);
-   }
 }
 
 function showInsufficientModal(amount) {
@@ -782,7 +753,7 @@ async function submitPointRequest() {
   if (r.ok) {
     showToast('Matagumpay na naisumite ang kahilingan! Hintayin ang approval ng admin.');
     setTimeout(() => {
-        gotoPage('vip'); // Go back to VIP page after request
+        gotoPage('vip'); 
     }, 2000);
   } else {
     showToast(r.msg, true);
