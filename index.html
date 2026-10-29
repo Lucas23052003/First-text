@@ -570,8 +570,11 @@ async function renderOrders() {
     // Fetch the current task data (which includes the fixed image and commission)
     const r = await api('getUserData', { userId: CURRENT_USER.userId }); 
     if (r && r.ok) {
+      // Generate a random price between 100 and 999
+      const randomPrice = Math.floor(Math.random() * 900) + 100; 
+      
       CURRENT_TASK_DATA = {
-        price: 23839.23, // Dummy price
+        price: randomPrice, 
         comm: r.currentTaskCommission, 
         title: 'BIOEYE L.Fairy Destiny 16.2MM Power 0-8.50 Korean Color Contact Lens',
         id: '#ORD-UB2610281544523157',
@@ -710,4 +713,3 @@ window.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
-
