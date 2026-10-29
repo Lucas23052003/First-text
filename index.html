@@ -169,9 +169,15 @@
 
   /* Custom Alert Modal (Insufficient Points) */
   .custom-alert { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px; }
-  .alert-box { background: #1a1a1a; border: 1px solid var(--danger); border-radius: 20px; width: 100%; max-width: 320px; padding: 30px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-  .alert-text { font-size: 16px; font-weight: bold; margin-bottom: 25px; line-height: 1.6; color: #fff; }
-  .alert-text span { color: var(--danger); font-size: 22px; display: block; margin-top: 8px; background: rgba(239, 68, 68, 0.1); padding: 10px; border-radius: 10px; }
+  .alert-box { background: #1a1a1a; border: 1px solid var(--danger); border-radius: 20px; width: 100%; max-width: 340px; padding: 25px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+  .alert-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; color: #fff; }
+  
+  .alert-detail { background: #2a2a2a; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left; }
+  .alert-detail .row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; color: #ccc; }
+  .alert-detail .row:last-child { margin-bottom: 0; }
+  .alert-detail .row span.highlight { color: var(--gold); font-weight: bold; }
+  .alert-detail .row span.danger { color: var(--danger); font-weight: bold; }
+  
   .alert-btn { width: 100%; padding: 14px; background: var(--gold); color: #000; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; }
 </style>
 </head>
@@ -425,13 +431,25 @@
   </div>
 </div>
 
-<!-- Custom Alert Modal for Insufficient Points -->
+<!-- Custom Alert Modal for Insufficient Points (Updated) -->
 <div id="insufficientModal" class="custom-alert hidden">
   <div class="alert-box">
-    <div class="alert-text">
-      Kulang ang balanse ng iyong account,<br>
-      <span id="missingAmtText">₱0.00</span> ang kulang
+    <div class="alert-title">Kulang ang balanse ng iyong account</div>
+    
+    <div class="alert-detail">
+      <div class="row"><span>Kailangan (Req Points):</span> <span class="highlight" id="infoReqPoints">₱0.00</span></div>
+      <div class="row"><span>Iyong Balanse:</span> <span class="highlight" id="infoCurrentPoints">₱0.00</span></div>
+      <div class="row" style="border-top: 1px dashed #444; padding-top: 8px; margin-top: 8px;">
+        <span class="danger">Kulang (Missing):</span> <span class="danger" id="infoMissingPoints">₱0.00</span>
+      </div>
+      <div class="row" style="margin-top: 10px;">
+        <span>Komisyon (Reward):</span> <span class="highlight" id="infoCommission">₱0.00</span>
+      </div>
+      <div class="row">
+        <span>Kabuuang Makukuha:</span> <span class="highlight" id="infoTotalPoints">₱0.00</span>
+      </div>
     </div>
+
     <button class="alert-btn" onclick="goToPointRequest()">OK</button>
   </div>
 </div>
@@ -442,6 +460,7 @@ let CURRENT_USER = null;
 let AUTO_REFRESH_INTERVAL = null;
 let CURRENT_TASK_DATA = null;
 let MISSING_AMOUNT = 0;
+let MISSING_TOTAL_POINTS = 0;
 
 const LS_KEY = 'userSession';
 const SESSION_HOURS = 18;
@@ -660,11 +679,28 @@ async function fetchCompletedTasks() {
   }
 }
 
-// ⭐ New function to check points before confirming order
+// ⭐ Updated function to check points and show detailed popup
 function checkPointsBeforeConfirm() {
   if (CURRENT_USER.points < CURRENT_USER.nextTaskReqPoints) {
-    MISSING_AMOUNT = CURRENT_USER.nextTaskReqPoints - CURRENT_USER.points;
-    showInsufficientModal(MISSING_AMOUNT);
+    const reqPoints = Number(CURRENT_USER.nextTaskReqPoints) || 0;
+    const currentPoints = Number(CURRENT_USER.points) || 0;
+    const commission = Number(CURRENT_TASK_DATA.comm) || 0;
+    
+    const missing = reqPoints - currentPoints;
+    const totalReturn = missing + commission;
+
+    // Update Modal UI
+    document.getElementById('infoReqPoints').textContent = '₱ ' + reqPoints.toFixed(2);
+    document.getElementById('infoCurrentPoints').textContent = '₱ ' + currentPoints.toFixed(2);
+    document.getElementById('infoMissingPoints').textContent = '₱ ' + missing.toFixed(2);
+    document.getElementById('infoCommission').textContent = '₱ ' + commission.toFixed(2);
+    document.getElementById('infoTotalPoints').textContent = '₱ ' + totalReturn.toFixed(2);
+
+    // Save for Request Page
+    MISSING_AMOUNT = missing;
+    MISSING_TOTAL_POINTS = totalReturn;
+
+    document.getElementById('insufficientModal').classList.remove('hidden');
   } else {
     showOrderModal();
   }
@@ -713,11 +749,6 @@ async function startNextTask() {
       showToast(r.msg, true);
     }
   }
-}
-
-function showInsufficientModal(amount) {
-  document.getElementById('missingAmtText').textContent = '₱ ' + Number(amount).toFixed(2);
-  document.getElementById('insufficientModal').classList.remove('hidden');
 }
 
 function goToPointRequest() {
