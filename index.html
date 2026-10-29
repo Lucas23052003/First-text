@@ -38,7 +38,8 @@
   /* Top Header */
   .top-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 16px 10px; }
   .logo { font-size: 16px; font-weight: bold; color: var(--gold); }
-  .bell-icon { font-size: 24px; cursor: pointer; color: var(--gold); }
+  .bell-icon { font-size: 24px; cursor: pointer; color: var(--gold); position: relative; }
+  .bell-badge { position: absolute; top: -5px; right: -5px; background: var(--danger); color: #fff; font-size: 10px; width: 18px; height: 18px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; }
 
   /* Auth Forms */
   .auth-wrap { padding: 40px 20px; max-width: 400px; margin: 0 auto; }
@@ -64,6 +65,9 @@
   .hbc-vip-level { font-size: 16px; font-weight: bold; color: var(--gold); }
   .hbc-amount { font-size: 32px; font-weight: bold; color: #fff; margin-bottom: 5px; }
   .hbc-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+  .hbc-frozen { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); padding: 8px 12px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+  .hbc-frozen label { font-size: 11px; color: #fca5a5; font-weight: bold; }
+  .hbc-frozen div { font-size: 14px; color: var(--danger); font-weight: bold; }
   .hbc-divider { height: 1px; background: #2a2a2a; margin: 15px 0; }
   .hbc-stats { display: flex; justify-content: space-between; margin-bottom: 20px; }
   .hbc-stat { flex: 1; }
@@ -71,8 +75,8 @@
   .hbc-stat div { font-size: 13px; font-weight: bold; color: #fff; }
   .hbc-stat:not(:last-child) { border-right: 1px solid #2a2a2a; }
   .hbc-stat:not(:first-child) { padding-left: 15px; }
-  .hbc-actions { display: flex; gap: 10px; }
-  .hbc-btn { flex: 1; padding: 14px; border-radius: 12px; font-size: 13px; font-weight: bold; border: none; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 5px; }
+  .hbc-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hbc-btn { flex: 1; min-width: 45%; padding: 14px; border-radius: 12px; font-size: 13px; font-weight: bold; border: none; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 5px; }
   .hbc-btn-gold { background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; }
   .hbc-btn-dark { background: #1f1f1f; color: #fff; border: 1px solid #333; }
 
@@ -160,6 +164,21 @@
   .request-card input { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: #fff; font-size: 14px; }
   .request-card .btn-submit { width: 100%; padding: 14px; background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; margin-top: 20px; cursor: pointer; }
 
+  /* ===== PAGE 5: WITHDRAW ===== */
+  .withdraw-page { padding: 20px 16px; }
+  .withdraw-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 20px; }
+  .withdraw-card h3 { margin: 0 0 15px; font-size: 18px; color: var(--gold); text-align: center; }
+  .withdraw-card label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; margin-top: 15px; }
+  .withdraw-card input { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: #fff; font-size: 14px; }
+  .withdraw-card .btn-submit { width: 100%; padding: 14px; background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; margin-top: 20px; cursor: pointer; }
+
+  /* ===== PAGE 6: NOTIFICATIONS ===== */
+  .noti-page { padding: 20px 16px; }
+  .noti-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 15px; margin-bottom: 10px; }
+  .noti-title { font-size: 14px; font-weight: bold; color: var(--gold); margin-bottom: 5px; }
+  .noti-msg { font-size: 13px; color: #ccc; line-height: 1.5; }
+  .noti-date { font-size: 10px; color: var(--text-muted); margin-top: 8px; text-align: right; }
+
   /* Bottom Nav */
   .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #111; border-top: 1px solid #2a2a2a; display: flex; justify-content: space-around; padding: 10px 0 15px; z-index: 999; }
   .nav-item { display: flex; flex-direction: column; align-items: center; color: #666; cursor: pointer; gap: 4px; }
@@ -167,122 +186,26 @@
   .nav-icon { font-size: 20px; }
   .nav-text { font-size: 10px; font-weight: bold; }
 
-  /* ===== Custom Warning Modal UI (Exactly like the image) ===== */
+  /* ===== Custom Warning Modal UI ===== */
   .custom-alert { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px; }
-  
-  .warning-box { 
-    background: #141414; 
-    border-radius: 24px; 
-    width: 100%; 
-    max-width: 360px; 
-    padding: 0; 
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8); 
-    overflow: hidden;
-    animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid #333;
-  }
-
-  @keyframes slideUp {
-    0% { transform: translateY(50px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
-  }
-
-  .warning-header {
-    background: #7f1d1d; /* Dark Red Background */
-    padding: 25px 20px 20px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .warning-header::before {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-    transform: rotate(45deg);
-  }
-
-  .warning-icon-wrapper {
-    width: 60px;
-    height: 60px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto 12px;
-    border: 2px solid rgba(255,255,255,0.2);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  }
-
-  .warning-icon {
-    font-size: 32px;
-    color: #fff;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.3);
-  }
-
-  .warning-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #fff;
-    margin: 0;
-    letter-spacing: 0.5px;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-  }
-  
-  .warning-subtitle {
-    font-size: 12px;
-    color: rgba(255,255,255,0.8);
-    margin-top: 5px;
-  }
-
-  .warning-body {
-    padding: 25px 25px 15px;
-    background: #141414;
-  }
-
-  .data-group {
-    margin-bottom: 15px;
-  }
-
-  .data-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    font-size: 14px;
-    color: #ccc;
-  }
-
-  .data-row:not(:last-child) {
-    border-bottom: 1px dashed #333;
-  }
-
+  .warning-box { background: #141414; border-radius: 24px; width: 100%; max-width: 360px; padding: 0; box-shadow: 0 20px 50px rgba(0,0,0,0.8); overflow: hidden; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid #333; }
+  @keyframes slideUp { 0% { transform: translateY(50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+  .warning-header { background: #7f1d1d; padding: 25px 20px 20px; text-align: center; position: relative; overflow: hidden; }
+  .warning-header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); transform: rotate(45deg); }
+  .warning-icon-wrapper { width: 60px; height: 60px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 12px; border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+  .warning-icon { font-size: 32px; color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+  .warning-title { font-size: 18px; font-weight: 700; color: #fff; margin: 0; letter-spacing: 0.5px; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+  .warning-subtitle { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 5px; }
+  .warning-body { padding: 25px 25px 15px; background: #141414; }
+  .data-group { margin-bottom: 15px; }
+  .data-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; font-size: 14px; color: #ccc; }
+  .data-row:not(:last-child) { border-bottom: 1px dashed #333; }
   .data-label { color: #aaa; font-weight: 500; }
   .data-value { font-weight: 700; font-size: 15px; color: #fff; }
   .data-value.highlight { color: var(--gold); }
   .data-value.danger { color: var(--danger); font-size: 16px; }
-
-  .warning-footer {
-    padding: 0 25px 25px;
-    background: #141414;
-  }
-
-  .warning-btn { 
-    width: 100%; 
-    padding: 16px; 
-    background: linear-gradient(135deg, #d4af37, #f5e08a); 
-    color: #000; 
-    border: none; 
-    border-radius: 14px; 
-    font-weight: 800; 
-    font-size: 15px; 
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-  }
+  .warning-footer { padding: 0 25px 25px; background: #141414; }
+  .warning-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; border: none; border-radius: 14px; font-weight: 800; font-size: 15px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
   .warning-btn:active { transform: scale(0.97); box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2); }
 </style>
 </head>
@@ -327,7 +250,7 @@
   <div id="page-home" class="page">
     <div class="top-header">
       <div class="logo">● ANA SAYFA</div>
-      <div class="bell-icon">🔔</div>
+      <div class="bell-icon" onclick="gotoPage('notifications')">🔔<span id="notiBadge" class="bell-badge hidden">0</span></div>
     </div>
 
     <div class="home-balance-card">
@@ -341,6 +264,12 @@
       
       <div class="hbc-amount">₱ <span id="homeBalance">0</span></div>
       <div class="hbc-sub">homepage</div>
+
+      <!-- Frozen Amount Display (Only shows if frozen > 0) -->
+      <div id="frozenDisplay" class="hbc-frozen hidden">
+        <label>🔒 Nakapirming Halaga (Frozen):</label>
+        <div>₱ <span id="homeFrozen">0</span></div>
+      </div>
       
       <div class="hbc-divider"></div>
       
@@ -360,8 +289,9 @@
       </div>
       
       <div class="hbc-actions">
-        <button class="hbc-btn hbc-btn-gold" onclick="gotoPage('vip')">⚡ Simulan ang pag-kita</button>
-        <button class="hbc-btn hbc-btn-dark" onclick="showToast('Recharge coming soon')">💳 Mag-recharge</button>
+        <button class="hbc-btn hbc-btn-gold" onclick="gotoPage('vip')">⚡ Simulan</button>
+        <button class="hbc-btn hbc-btn-dark" onclick="gotoPage('request')">📥 Mag-request</button>
+        <button class="hbc-btn hbc-btn-dark" onclick="gotoPage('withdraw')">💸 Mag-withdraw</button>
       </div>
     </div>
 
@@ -370,10 +300,10 @@
       <div class="section-link">SIMULAN ANG PAG-KITA</div>
     </div>
     <div class="qa-grid">
-      <div class="qa-card" onclick="showToast('Recharge coming soon')"><div class="qa-icon">💰</div><div class="qa-text">Mag-recharge</div></div>
-      <div class="qa-card" onclick="showToast('Withdraw coming soon')"><div class="qa-icon">💸</div><div class="qa-text">Mag-withdraw</div></div>
+      <div class="qa-card" onclick="gotoPage('request')"><div class="qa-icon">💰</div><div class="qa-text">Mag-request</div></div>
+      <div class="qa-card" onclick="gotoPage('withdraw')"><div class="qa-icon">💸</div><div class="qa-text">Mag-withdraw</div></div>
       <div class="qa-card" onclick="showToast('Customer Service coming soon')"><div class="qa-icon">🎧</div><div class="qa-text">Serbisyo sa Customer</div></div>
-      <div class="qa-card" onclick="showToast('System Notification coming soon')"><div class="qa-icon">🔔</div><div class="qa-text">Abiso ng System</div></div>
+      <div class="qa-card" onclick="gotoPage('notifications')"><div class="qa-icon">🔔</div><div class="qa-text">Abiso ng System</div></div>
     </div>
 
     <div class="section-header">
@@ -390,7 +320,7 @@
   <div id="page-orders" class="page hidden">
     <div class="top-header">
       <div class="logo">● TASK_TAB1</div>
-      <div class="bell-icon">🔔</div>
+      <div class="bell-icon" onclick="gotoPage('notifications')">🔔<span id="notiBadgeOrders" class="bell-badge hidden">0</span></div>
     </div>
     <h2 style="margin: 0 0 10px 16px; font-size: 24px;">task_title</h2>
 
@@ -415,7 +345,7 @@
   <div id="page-vip" class="page hidden">
     <div class="top-header">
       <div class="logo">● </div>
-      <div class="bell-icon">🔔</div>
+      <div class="bell-icon" onclick="gotoPage('notifications')">🔔<span id="notiBadgeVip" class="bell-badge hidden">0</span></div>
     </div>
 
     <div style="padding: 0 16px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
@@ -463,7 +393,7 @@
   <div id="page-request" class="page hidden">
     <div class="top-header">
       <div class="logo">● POINT REQUEST</div>
-      <div class="bell-icon">🔔</div>
+      <div class="bell-icon" onclick="gotoPage('notifications')">🔔<span id="notiBadgeRequest" class="bell-badge hidden">0</span></div>
     </div>
 
     <div class="request-page">
@@ -481,6 +411,49 @@
     </div>
   </div>
 
+  <!-- ================= PAGE 5: WITHDRAW ================= -->
+  <div id="page-withdraw" class="page hidden">
+    <div class="top-header">
+      <div class="logo">● MAG-WITHDRAW</div>
+      <div class="bell-icon" onclick="gotoPage('notifications')">🔔<span id="notiBadgeWithdraw" class="bell-badge hidden">0</span></div>
+    </div>
+
+    <div class="withdraw-page">
+      <div class="withdraw-card">
+        <h3>Mag-withdraw ng Points</h3>
+        
+        <label>Pangalan:</label>
+        <input id="wdName" type="text" placeholder="Ilagay ang iyong pangalan">
+
+        <label>Pangalan ng Bangko (Philippines):</label>
+        <input id="wdBank" type="text" placeholder="Halimbawa: BDO, BPI, GCash">
+
+        <label>Numero ng Account:</label>
+        <input id="wdAccNo" type="text" placeholder="Ilagay ang numero ng account">
+
+        <label>Halaga na Gustong I-withdraw (₱):</label>
+        <input id="wdAmount" type="number" placeholder="Ilagay ang halaga">
+
+        <label>Password (Para sa seguridad):</label>
+        <input id="wdPass" type="password" placeholder="Ilagay ang iyong password">
+
+        <button class="btn-submit" onclick="submitWithdrawal()">Isumite ang Withdrawal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PAGE 6: NOTIFICATIONS ================= -->
+  <div id="page-notifications" class="page hidden">
+    <div class="top-header">
+      <div class="logo">● MGA ABISO</div>
+      <div class="bell-icon" onclick="gotoPage('home')">🔙</div>
+    </div>
+
+    <div class="noti-page" id="notiContainer">
+      <!-- Rendered via JS -->
+    </div>
+  </div>
+
   <!-- Bottom Navigation -->
   <div class="bottom-nav">
     <div class="nav-item" onclick="gotoPage('home')" id="nav-home">
@@ -492,8 +465,8 @@
     <div class="nav-item active" onclick="gotoPage('vip')" id="nav-vip">
       <div class="nav-icon">⚖️</div><div class="nav-text">SIPARIS AL</div>
     </div>
-    <div class="nav-item" onclick="showToast('Support coming soon')" id="nav-support">
-      <div class="nav-icon">🎧</div><div class="nav-text">MÜŞTERİ HİZMETLERİ</div>
+    <div class="nav-item" onclick="gotoPage('notifications')" id="nav-support">
+      <div class="nav-icon">🎧</div><div class="nav-text">MGA ABISO</div>
     </div>
     <div class="nav-item" onclick="showToast('Account coming soon')" id="nav-account">
       <div class="nav-icon">👤</div><div class="nav-text">HESABIM</div>
@@ -591,6 +564,7 @@ let AUTO_REFRESH_INTERVAL = null;
 let CURRENT_TASK_DATA = null;
 let MISSING_AMOUNT = 0;
 let MISSING_TOTAL_POINTS = 0;
+let UNREAD_NOTI_COUNT = 0;
 
 const LS_KEY = 'userSession';
 const SESSION_HOURS = 18;
@@ -691,6 +665,12 @@ function gotoPage(pageName) {
   else if(pageName === 'orders') document.getElementById('nav-orders').classList.add('active');
   else if(pageName === 'vip') document.getElementById('nav-vip').classList.add('active');
   else if(pageName === 'request') document.getElementById('nav-vip').classList.add('active');
+  else if(pageName === 'withdraw') document.getElementById('nav-vip').classList.add('active');
+  else if(pageName === 'notifications') document.getElementById('nav-support').classList.add('active');
+
+  if (pageName === 'notifications') {
+    fetchNotifications();
+  }
 
   setTimeout(() => { toggleLoader(false); }, 400); 
 }
@@ -713,6 +693,7 @@ async function fetchLatestData() {
     saveSession(CURRENT_USER);
     updateUI();
     fetchCompletedTasks();
+    fetchNotificationsCount();
   }
 }
 
@@ -727,6 +708,14 @@ function updateUI() {
   document.getElementById('gainCommDisplay').textContent = '₱ ' + (CURRENT_USER.totalCommission || 0);
   document.getElementById('gainTotalDisplay').textContent = '₱ ' + (CURRENT_USER.totalCommission || 0);
   
+  // Frozen Amount Display
+  if (CURRENT_USER.frozenPoints > 0) {
+    document.getElementById('frozenDisplay').classList.remove('hidden');
+    document.getElementById('homeFrozen').textContent = CURRENT_USER.frozenPoints;
+  } else {
+    document.getElementById('frozenDisplay').classList.add('hidden');
+  }
+
   // VIP Page
   document.getElementById('vipPageBalance').textContent = CURRENT_USER.points;
   document.getElementById('vipPageBalance2').textContent = CURRENT_USER.points;
@@ -918,6 +907,96 @@ async function submitPointRequest() {
     }, 2000);
   } else {
     showToast(r.msg, true);
+  }
+}
+
+// ================== Page 5: Withdraw Logic ==================
+async function submitWithdrawal() {
+  const name = document.getElementById('wdName').value.trim();
+  const bank = document.getElementById('wdBank').value.trim();
+  const accNo = document.getElementById('wdAccNo').value.trim();
+  const amount = parseFloat(document.getElementById('wdAmount').value);
+  const pass = document.getElementById('wdPass').value;
+
+  if (!name || !bank || !accNo || isNaN(amount) || amount <= 0 || !pass) {
+    showToast('Mangyaring punan ang lahat ng field nang tama.', true);
+    return;
+  }
+
+  // Check if task is in progress (Frontend validation)
+  if (CURRENT_USER.tasksInProgress > 0) {
+    showToast('Hindi ka makakapag-withdraw habang may gawaing isinasagawa.', true);
+    return;
+  }
+
+  toggleLoader(true);
+  const r = await api('submitWithdrawal', {
+    userId: CURRENT_USER.userId,
+    realName: name,
+    bankName: bank,
+    accountNo: accNo,
+    points: amount,
+    password: pass
+  });
+  toggleLoader(false);
+
+  if (r.ok) {
+    showToast(r.msg);
+    setTimeout(() => {
+        gotoPage('home'); 
+    }, 2000);
+  } else {
+    showToast(r.msg, true);
+  }
+}
+
+// ================== Page 6: Notifications Logic ==================
+async function fetchNotificationsCount() {
+  const r = await api('getNotifications', { userId: CURRENT_USER.userId });
+  if (r && r.ok) {
+    UNREAD_NOTI_COUNT = r.list.length; // Simple count, assumes all fetched are unread
+    updateNotificationBadges();
+  }
+}
+
+function updateNotificationBadges() {
+  const badges = document.querySelectorAll('.bell-badge');
+  badges.forEach(badge => {
+    if (UNREAD_NOTI_COUNT > 0) {
+      badge.textContent = UNREAD_NOTI_COUNT;
+      badge.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+    }
+  });
+}
+
+async function fetchNotifications() {
+  toggleLoader(true);
+  const r = await api('getNotifications', { userId: CURRENT_USER.userId });
+  toggleLoader(false);
+  
+  const container = document.getElementById('notiContainer');
+  container.innerHTML = '';
+
+  if (r && r.ok) {
+    if (r.list.length === 0) {
+      container.innerHTML = '<p style="text-align:center; color:#888; padding:20px;">Wala kang abiso sa ngayon.</p>';
+      return;
+    }
+
+    r.list.forEach(n => {
+      const div = document.createElement('div');
+      div.className = 'noti-card';
+      div.innerHTML = `
+        <div class="noti-title">${n.title}</div>
+        <div class="noti-msg">${n.message}</div>
+        <div class="noti-date">${n.createdAt}</div>
+      `;
+      container.appendChild(div);
+    });
+  } else {
+    container.innerHTML = '<p style="text-align:center; color:#888; padding:20px;">Error loading notifications.</p>';
   }
 }
 
