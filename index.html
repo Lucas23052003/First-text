@@ -54,6 +54,17 @@
   .btn-primary { width: 100%; padding: 14px; background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; }
   .auth-link { text-align: center; margin-top: 15px; font-size: 13px; color: var(--text-muted); }
   .auth-link a { color: var(--gold); text-decoration: none; }
+
+  /* Custom Confirm Modal */
+  .custom-confirm-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px); z-index: 9999; display: flex; justify-content: center; align-items: center; padding: 20px; }
+  .custom-confirm-box { background: var(--card-bg); border: 1px solid var(--card-border); padding: 24px; border-radius: 16px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: popIn 0.3s ease; }
+  @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .custom-confirm-box h3 { margin: 0 0 10px; color: var(--gold); font-size: 18px; }
+  .custom-confirm-box p { margin: 0 0 20px; color: #ccc; font-size: 14px; line-height: 1.5; }
+  .custom-confirm-btns { display: flex; gap: 10px; }
+  .custom-confirm-btns button { flex: 1; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; border: none; }
+  .btn-cf-cancel { background: #2a2a2a; color: #fff; }
+  .btn-cf-ok { background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; }
     .home-balance-card { margin: 16px; background: linear-gradient(145deg, #1c1a15, #0f0f0f); border: 1px solid #332a12; border-radius: 20px; padding: 20px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
   .hbc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
   .hbc-label { display: flex; align-items: center; gap: 5px; background: #2a2212; padding: 6px 12px; border-radius: 8px; font-size: 10px; font-weight: bold; color: var(--gold); text-transform: uppercase; }
@@ -592,6 +603,18 @@
   </div>
 </div>
 
+<!-- MODAL: CUSTOM CONFIRM (အလှပြင် Confirm Box အသစ်) -->
+<div id="customConfirmModal" class="custom-confirm-overlay hidden">
+  <div class="custom-confirm-box">
+    <h3 id="cfTitle">Confirm</h3>
+    <p id="cfMsg">Are you sure?</p>
+    <div class="custom-confirm-btns">
+      <button class="btn-cf-cancel" onclick="closeCustomConfirm()">Cancel</button>
+      <button class="btn-cf-ok" id="cfOkBtn">OK</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const API_URL = 'https://script.google.com/macros/s/AKfycbwM0fTSH3KilMBaRBTbdmHDyVN_EZxL7YdIEbhkXPbZMk2FZPFpnAZpK9pI2EyQ-JqM/exec'; // ⚠️ သင့် URL ထည့်ပါ
 let CURRENT_USER = null;
@@ -632,6 +655,20 @@ function showToast(message, isError = false) {
   container.appendChild(toast);
   setTimeout(() => toast.classList.add('show'), 10);
   setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
+}
+
+// Custom Confirm Logic
+function showCustomConfirm(title, msg, onOk) {
+  document.getElementById('cfTitle').textContent = title;
+  document.getElementById('cfMsg').textContent = msg;
+  document.getElementById('customConfirmModal').classList.remove('hidden');
+  document.getElementById('cfOkBtn').onclick = function() {
+    closeCustomConfirm();
+    onOk();
+  };
+}
+function closeCustomConfirm() {
+  document.getElementById('customConfirmModal').classList.add('hidden');
 }
 
 function saveSession(userData) { localStorage.setItem(LS_KEY, JSON.stringify({ data: userData, expiresAt: Date.now() + SESSION_HOURS * 60 * 60 * 1000 })); }
@@ -964,19 +1001,20 @@ function showOrderModal() {
 function closeOrderModal() { document.getElementById('orderConfirmModal').classList.add('hidden'); }
 function closeInsufficientModal() { document.getElementById('insufficientModal').classList.add('hidden'); }
 
+// ⭐ Custom Confirm အသုံးပြုထားသော Submit Order
 async function submitOrder() {
   closeOrderModal();
-  if (!confirm('သေချာပြီလား? ဒီ Order ကို အတည်ပြုမှာလား?')) {
-    return;
-  }
-  toggleLoader(true);
-  const r = await api('completeTask', { userId: CURRENT_USER.userId });
-  toggleLoader(false);
-  if (r.ok) {
-    showToast('Nakumpleto ang gawain! Kumita ng: ₱' + r.earned); 
-    fetchLatestData();
-    gotoPage('vip');
-  } else { showToast(r.msg, true); }
+  showCustomConfirm("Order အတည်ပြုမလား?", "သေချာပြီလား? ဒီ Order ကို အတည်ပြုမှာလား?", function() {
+    toggleLoader(true);
+    api('completeTask', { userId: CURRENT_USER.userId }).then(r => {
+      toggleLoader(false);
+      if (r.ok) {
+        showToast('Nakumpleto ang gawain! Kumita ng: ₱' + r.earned); 
+        fetchLatestData();
+        gotoPage('vip');
+      } else { showToast(r.msg, true); }
+    });
+  });
 }
 
 // ================== VIP Task Start ==================
