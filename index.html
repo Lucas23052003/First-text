@@ -5,59 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>User Portal</title>
 <style>
-  :root {
-    --bg-color: #0d0d0d; --card-bg: #141414; --card-border: #2a2a2a;
-    --gold: #d4af37; --gold-light: #f5e08a; --text-main: #ffffff; --text-muted: #888888;
-    --danger: #ef4444; --success: #22c55e; --input-bg: #1f1f1f;
-  }
-
+  :root { --bg-color: #0d0d0d; --card-bg: #141414; --card-border: #2a2a2a; --gold: #d4af37; --gold-light: #f5e08a; --text-main: #ffffff; --text-muted: #888888; --danger: #ef4444; --success: #22c55e; --input-bg: #1f1f1f; }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
   html, body { margin: 0; padding: 0; background: var(--bg-color); color: var(--text-main); min-height: 100vh; padding-bottom: 90px; }
   .app { max-width: 640px; margin: 0 auto; }
-
   .hidden { display: none !important; }
   .msg { padding: 10px; margin: 10px 0; border-radius: 8px; font-size: 13px; display: none; }
   .err { background: #7f1d1d; color: #fecaca; display: block; }
   .ok  { background: #14532d; color: #bbf7d0; display: block; }
-  
-  /* Global Loader */
-  #pageLoader {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8); z-index: 9999; display: flex; justify-content: center; align-items: center;
-    flex-direction: column; color: var(--gold); font-weight: bold;
-  }
+  #pageLoader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; color: var(--gold); font-weight: bold; }
   .spinner { border: 4px solid rgba(255,255,255,0.1); border-left-color: var(--gold); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-  /* Custom Notification Toast */
   .toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; pointer-events: none; }
   .toast { background: #1f1f1f; border: 1px solid var(--gold); color: #fff; padding: 12px 20px; border-radius: 12px; font-size: 14px; font-weight: bold; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.5); opacity: 0; transform: translateY(-20px); transition: all 0.3s ease; pointer-events: auto; }
   .toast.show { opacity: 1; transform: translateY(0); }
   .toast.error { border-color: var(--danger); }
-
-  /* Top Header */
   .top-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 16px 10px; }
   .logo { font-size: 16px; font-weight: bold; color: var(--gold); }
   .bell-icon { font-size: 24px; cursor: pointer; color: var(--gold); position: relative; }
   .bell-badge { position: absolute; top: -5px; right: -5px; background: var(--danger); color: #fff; font-size: 10px; width: 18px; height: 18px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; }
-
-  /* Auth Forms */
   .auth-wrap { padding: 40px 20px; max-width: 400px; margin: 0 auto; }
   .auth-wrap h2 { text-align: center; color: var(--gold); margin-bottom: 20px; }
   .input-group { margin-bottom: 15px; }
-  .input-group input {
-    width: 100%; padding: 14px; background: var(--input-bg); border: 1px solid var(--card-border);
-    border-radius: 10px; color: var(--text-main); font-size: 14px; outline: none;
-  }
-  .btn-primary {
-    width: 100%; padding: 14px; background: linear-gradient(135deg, #d4af37, #f5e08a);
-    color: #000; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer;
-  }
+  .input-group input { width: 100%; padding: 14px; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: var(--text-main); font-size: 14px; outline: none; }
+  .btn-primary { width: 100%; padding: 14px; background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; }
   .auth-link { text-align: center; margin-top: 15px; font-size: 13px; color: var(--text-muted); }
   .auth-link a { color: var(--gold); text-decoration: none; }
-
-  /* ===== PAGE 1: HOME ===== */
-  .home-balance-card { margin: 16px; background: linear-gradient(145deg, #1c1a15, #0f0f0f); border: 1px solid #332a12; border-radius: 20px; padding: 20px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .home-balance-card { margin: 16px; background: linear-gradient(145deg, #1c1a15, #0f0f0f); border: 1px solid #332a12; border-radius: 20px; padding: 20px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
   .hbc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
   .hbc-label { display: flex; align-items: center; gap: 5px; background: #2a2212; padding: 6px 12px; border-radius: 8px; font-size: 10px; font-weight: bold; color: var(--gold); text-transform: uppercase; }
   .hbc-vip { text-align: right; }
@@ -79,26 +53,20 @@
   .hbc-btn { flex: 1; min-width: 45%; padding: 14px; border-radius: 12px; font-size: 13px; font-weight: bold; border: none; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 5px; }
   .hbc-btn-gold { background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; }
   .hbc-btn-dark { background: #1f1f1f; color: #fff; border: 1px solid #333; }
-
   .section-header { display: flex; justify-content: space-between; align-items: center; padding: 0 16px; margin-top: 25px; margin-bottom: 15px; }
   .section-title { font-size: 16px; font-weight: bold; color: #fff; }
   .section-link { font-size: 11px; color: var(--gold); text-transform: uppercase; }
-  
   .qa-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 0 16px; }
   .qa-card { background: #141414; border: 1px solid #2a2a2a; border-radius: 12px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
   .qa-icon { width: 32px; height: 32px; background: #1f1f1f; border-radius: 8px; display: flex; justify-content: center; align-items: center; color: var(--gold); font-size: 14px; border: 1px solid #332a12; }
   .qa-text { font-size: 10px; color: #fff; text-align: center; font-weight: 500; }
-
   .gain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 16px; }
   .gain-card { background: #141414; border: 1px solid #2a2a2a; border-radius: 12px; padding: 15px; }
   .gain-card label { display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 5px; }
   .gain-card div { font-size: 16px; font-weight: bold; color: var(--gold); }
-
-  /* ===== PAGE 2: ORDERS (TASKS) ===== */
   .order-tabs { display: flex; gap: 10px; overflow-x: auto; padding: 10px 16px 15px; }
   .order-tab { padding: 8px 16px; border-radius: 20px; font-size: 12px; white-space: nowrap; border: 1px solid var(--card-border); background: transparent; color: var(--text-muted); cursor: pointer; }
   .order-tab.active { background: var(--gold); color: #000; border-color: var(--gold); font-weight: bold; }
-  
   .order-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 15px; margin: 0 16px 12px; display: flex; gap: 12px; position: relative; cursor: pointer; }
   .order-img { width: 70px; height: 70px; border-radius: 10px; object-fit: cover; border: 1px solid #333; }
   .order-details { flex: 1; }
@@ -107,95 +75,61 @@
   .order-price { font-size: 14px; color: var(--gold); font-weight: bold; }
   .order-status { font-size: 11px; display: flex; align-items: center; gap: 5px; margin-top: 5px; color: var(--text-muted); }
   .dot { width: 6px; height: 6px; border-radius: 50%; background: #00d2ff; }
-  
   .btn-order-action { width: calc(100% - 32px); margin: 0 16px 20px; padding: 12px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; }
-
-  /* Modal for Task */
   .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; justify-content: center; align-items: center; padding: 20px; }
   .modal-content { background: #141414; width: 100%; max-width: 400px; border-radius: 20px; padding: 20px; border: 1px solid #2a2a2a; }
   .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #2a2a2a; padding-bottom: 10px; }
   .modal-title { font-size: 16px; font-weight: bold; }
   .close-btn { background: #2a2a2a; border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; }
-  
   .modal-item { display: flex; gap: 10px; margin-bottom: 15px; }
   .modal-item img { width: 60px; height: 60px; border-radius: 8px; }
   .modal-item-info { font-size: 12px; color: var(--text-muted); }
-  
   .modal-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; }
   .modal-row strong { color: var(--gold); }
-  
   .modal-total { border-top: 1px dashed #333; padding-top: 10px; margin-top: 10px; }
   .modal-total .row2 { font-size: 18px; font-weight: bold; color: var(--gold); display: flex; justify-content: space-between; margin-top: 5px; }
-
   .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
   .btn-cancel { flex: 1; padding: 12px; background: #2a2a2a; color: #fff; border: none; border-radius: 10px; font-weight: bold; }
   .btn-confirm { flex: 2; padding: 12px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; }
-
-  /* ===== PAGE 3: VIP / START TASKS ===== */
-  .vip-page-header { padding: 20px 16px; text-align: center; }
-  .vip-page-header h2 { margin: 0 0 5px; font-size: 24px; color: #fff; }
-  .vip-page-header p { margin: 0; font-size: 14px; color: var(--gold); }
-  
   .vip-main-card { margin: 0 16px; background: var(--card-bg); border: 1px solid #332a12; border-radius: 16px; padding: 20px; }
   .vmc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
   .vmc-level { font-size: 20px; font-weight: bold; color: var(--gold); }
   .vmc-bonus { background: #2a2212; border: 1px solid #443714; padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: bold; color: var(--gold); text-align: right; }
   .vmc-bonus-label { font-size: 8px; text-transform: uppercase; display: block; margin-bottom: 2px; }
   .vmc-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; }
-  
   .vmc-stats { display: flex; justify-content: space-around; text-align: center; margin-bottom: 20px; border-top: 1px solid #2a2a2a; border-bottom: 1px solid #2a2a2a; padding: 15px 0; }
   .vmc-stat div { font-size: 20px; font-weight: bold; color: #fff; }
   .vmc-stat label { font-size: 11px; color: var(--text-muted); }
-  
   .vmc-avail { text-align: center; font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
   .vmc-avail strong { display: block; font-size: 16px; color: #fff; margin-top: 5px; }
-  
   .vmc-start-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; cursor: pointer; }
-  
   .vip-rules { margin: 20px 16px; background: #141414; border: 1px solid #2a2a2a; border-radius: 12px; padding: 15px; }
   .vip-rules h4 { margin: 0 0 10px; font-size: 12px; color: var(--text-muted); text-transform: uppercase; }
   .vip-rules p { font-size: 11px; color: #aaa; line-height: 1.6; margin: 0 0 10px; }
   .vip-rules p:last-child { margin-bottom: 0; }
-
-  /* ===== PAGE 4: POINT REQUEST ===== */
-  .request-page { padding: 20px 16px; }
-  .request-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 20px; }
-  .request-card h3 { margin: 0 0 15px; font-size: 18px; color: var(--gold); text-align: center; }
-  .request-card label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; margin-top: 15px; }
-  .request-card input { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: #fff; font-size: 14px; }
-  .request-card .btn-submit { width: 100%; padding: 14px; background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; margin-top: 20px; cursor: pointer; }
-
-  /* ===== PAGE 5: WITHDRAW ===== */
-  .withdraw-page { padding: 20px 16px; }
-  .withdraw-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 20px; }
-  .withdraw-card h3 { margin: 0 0 15px; font-size: 18px; color: var(--gold); text-align: center; }
-  .withdraw-card label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; margin-top: 15px; }
-  .withdraw-card input { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: #fff; font-size: 14px; }
-  .withdraw-card .btn-submit { width: 100%; padding: 14px; background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; margin-top: 20px; cursor: pointer; }
-
-  /* ===== PAGE 6: NOTIFICATIONS ===== */
-  .noti-page { padding: 20px 16px; }
+  .request-page, .withdraw-page { padding: 20px 16px; }
+  .request-card, .withdraw-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 20px; }
+  .request-card h3, .withdraw-card h3 { margin: 0 0 15px; font-size: 18px; color: var(--gold); text-align: center; }
+  .request-card label, .withdraw-card label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; margin-top: 15px; }
+  .request-card input, .withdraw-card input { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: #fff; font-size: 14px; }
+  .request-card .btn-submit, .withdraw-card .btn-submit { width: 100%; padding: 14px; background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; border: none; border-radius: 12px; font-weight: bold; font-size: 15px; margin-top: 20px; cursor: pointer; }
+    .noti-page { padding: 20px 16px; }
   .noti-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 15px; margin-bottom: 10px; }
   .noti-title { font-size: 14px; font-weight: bold; color: var(--gold); margin-bottom: 5px; }
   .noti-msg { font-size: 13px; color: #ccc; line-height: 1.5; }
   .noti-date { font-size: 10px; color: var(--text-muted); margin-top: 8px; text-align: right; }
-
-  /* Bottom Nav */
   .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #111; border-top: 1px solid #2a2a2a; display: flex; justify-content: space-around; padding: 10px 0 15px; z-index: 999; }
   .nav-item { display: flex; flex-direction: column; align-items: center; color: #666; cursor: pointer; gap: 4px; }
   .nav-item.active { color: var(--gold); }
   .nav-icon { font-size: 20px; }
   .nav-text { font-size: 10px; font-weight: bold; }
-
-  /* ===== Custom Warning Modal UI ===== */
   .custom-alert { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px; }
   .warning-box { background: #141414; border-radius: 24px; width: 100%; max-width: 360px; padding: 0; box-shadow: 0 20px 50px rgba(0,0,0,0.8); overflow: hidden; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid #333; }
   @keyframes slideUp { 0% { transform: translateY(50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
   .warning-header { background: #7f1d1d; padding: 25px 20px 20px; text-align: center; position: relative; overflow: hidden; }
-  .warning-header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); transform: rotate(45deg); }
-  .warning-icon-wrapper { width: 60px; height: 60px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 12px; border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-  .warning-icon { font-size: 32px; color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
-  .warning-title { font-size: 18px; font-weight: 700; color: #fff; margin: 0; letter-spacing: 0.5px; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+  .warning-icon-wrapper { width: 60px; height: 60px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 12px; border: 2px solid rgba(255,255,255,0.2); }
+  .warning-icon { font-size: 32px; color: #fff; }
+  .warning-title { font-size: 18px; font-weight: 700; color: #fff; margin: 0; }
   .warning-subtitle { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 5px; }
   .warning-body { padding: 25px 25px 15px; background: #141414; }
   .data-group { margin-bottom: 15px; }
@@ -206,22 +140,62 @@
   .data-value.highlight { color: var(--gold); }
   .data-value.danger { color: var(--danger); font-size: 16px; }
   .warning-footer { padding: 0 25px 25px; background: #141414; }
-  .warning-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; border: none; border-radius: 14px; font-weight: 800; font-size: 15px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
-  .warning-btn:active { transform: scale(0.97); box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2); }
+  .warning-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; border: none; border-radius: 14px; font-weight: 800; font-size: 15px; cursor: pointer; }
+  
+  /* ===== ACCOUNT PAGE ===== */
+  .account-page { padding: 16px; }
+  .acc-profile-card { background: linear-gradient(145deg, #1c1a15, #0f0f0f); border: 1px solid #332a12; border-radius: 20px; padding: 20px; margin-bottom: 14px; }
+  .acc-profile-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .acc-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--gold); display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: bold; color: #000; }
+  .acc-profile-name { font-size: 18px; font-weight: bold; color: #fff; }
+  .acc-profile-id { font-size: 11px; color: var(--text-muted); }
+  .acc-info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #2a2a2a; font-size: 13px; }
+  .acc-info-row:last-child { border-bottom: none; }
+  .acc-info-label { color: var(--text-muted); }
+  .acc-info-value { color: #fff; font-weight: bold; }
+  .acc-info-value.gold { color: var(--gold); }
+  .acc-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px; margin-bottom: 12px; }
+  .acc-card-title { font-size: 12px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+  .acc-credit-score { font-size: 32px; font-weight: bold; color: var(--gold); }
+  .acc-credit-hint { font-size: 11px; margin-top: 4px; }
+  .acc-credit-hint.ok { color: var(--success); }
+  .acc-credit-hint.bad { color: var(--danger); }
+  .acc-menu-item { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; margin-bottom: 10px; cursor: pointer; }
+  .acc-menu-left { display: flex; align-items: center; gap: 12px; }
+  .acc-menu-icon { font-size: 20px; }
+  .acc-menu-text { font-size: 14px; font-weight: 600; color: #fff; }
+  .acc-menu-arrow { color: var(--text-muted); font-size: 16px; }
+  .acc-logout-btn { width: 100%; padding: 15px; margin-top: 10px; background: #7f1d1d; color: #fff; border: 1px solid #ef4444; border-radius: 14px; font-weight: bold; font-size: 15px; cursor: pointer; }
+
+  /* ===== RECORDS ===== */
+  .record-page { padding: 16px; }
+  .record-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 14px; margin-bottom: 10px; }
+  .record-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .record-code { font-size: 12px; color: var(--gold); font-weight: bold; }
+  .record-status { font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 20px; text-transform: uppercase; }
+  .record-status.pending { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+  .record-status.approved { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+  .record-status.cancelled { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+  .record-detail { font-size: 12px; color: var(--text-muted); margin-bottom: 3px; }
+  .record-detail b { color: #fff; }
+  .record-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 13px; }
+
+  /* ===== SETTINGS ===== */
+  .settings-page { padding: 16px; }
+  .settings-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 18px; margin-bottom: 14px; }
+  .settings-card h4 { margin: 0 0 14px; font-size: 14px; color: var(--gold); }
+  .settings-card label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; margin-top: 12px; }
+  .settings-card input { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: #fff; font-size: 14px; }
+  .settings-btn { width: 100%; padding: 13px; margin-top: 16px; background: linear-gradient(135deg, #d4af37, #f5e08a); color: #000; border: none; border-radius: 12px; font-weight: bold; font-size: 14px; cursor: pointer; }
+  .lang-toggle { display: flex; gap: 10px; }
+  .lang-btn { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--card-border); background: var(--input-bg); color: #fff; font-size: 13px; font-weight: bold; cursor: pointer; }
+  .lang-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
 </style>
 </head>
 <body>
 
-<!-- Global Toast Container -->
 <div id="toastContainer" class="toast-container"></div>
-
-<!-- Loader -->
-<div id="pageLoader">
-  <div class="spinner"></div>
-  <div>Naglo-load...</div>
-</div>
-
-<!-- AUTH -->
+<div id="pageLoader"><div class="spinner"></div><div>Naglo-load...</div></div>
 <div id="authWrap" class="hidden">
   <div class="auth-wrap" id="loginBox">
     <h2>Mag-login</h2>
@@ -244,16 +218,13 @@
   </div>
 </div>
 
-<!-- MAIN APP -->
 <div id="appWrap" class="app hidden">
-  
-  <!-- ================= PAGE 1: HOME ================= -->
+  <!-- PAGE 1: HOME -->
   <div id="page-home" class="page">
     <div class="top-header">
       <div class="logo">● ANA SAYFA</div>
       <div class="bell-icon" onclick="gotoPage('notifications')">🔔<span id="notiBadge" class="bell-badge hidden">0</span></div>
     </div>
-
     <div class="home-balance-card">
       <div class="hbc-top">
         <div class="hbc-label">💳 AKING BALANSE</div>
@@ -262,33 +233,18 @@
           <div class="hbc-vip-level" id="vipBadge">VIP</div>
         </div>
       </div>
-      
       <div class="hbc-amount">₱ <span id="homeBalance">0</span></div>
       <div class="hbc-sub">homepage</div>
-
-      <!-- Frozen Amount Display (Only shows if frozen > 0) -->
       <div id="frozenDisplay" class="hbc-frozen hidden">
         <label>🔒 Nakapirming Halaga (Frozen):</label>
         <div>₱ <span id="homeFrozen">0</span></div>
       </div>
-      
       <div class="hbc-divider"></div>
-      
       <div class="hbc-stats">
-        <div class="hbc-stat">
-          <label>Komisyon Ngayon</label>
-          <div id="homeComm">₱ 0</div>
-        </div>
-        <div class="hbc-stat">
-          <label>Kita</label>
-          <div id="homeGain">₱ 0</div>
-        </div>
-        <div class="hbc-stat">
-          <label>Kita Ngayon</label>
-          <div id="homeEarn">₱ 0</div>
-        </div>
+        <div class="hbc-stat"><label>Komisyon Ngayon</label><div id="homeComm">₱ 0</div></div>
+        <div class="hbc-stat"><label>Kita</label><div id="homeGain">₱ 0</div></div>
+        <div class="hbc-stat"><label>Kita Ngayon</label><div id="homeEarn">₱ 0</div></div>
       </div>
-      
       <div class="hbc-actions">
         <button class="hbc-btn hbc-btn-gold" onclick="gotoPage('vip')">⚡ Simulan</button>
         <button class="hbc-btn hbc-btn-dark" onclick="gotoPage('request')">📥 Mag-request</button>
@@ -317,38 +273,31 @@
     </div>
   </div>
 
-  <!-- ================= PAGE 2: ORDERS (TASKS) ================= -->
+  <!-- PAGE 2: ORDERS -->
   <div id="page-orders" class="page hidden">
     <div class="top-header">
       <div class="logo">● TASK_TAB1</div>
       <div class="bell-icon" onclick="gotoPage('notifications')">🔔<span id="notiBadgeOrders" class="bell-badge hidden">0</span></div>
     </div>
     <h2 style="margin: 0 0 10px 16px; font-size: 24px;">task_title</h2>
-
     <div class="order-tabs">
       <div class="order-tab active">task_tab1</div>
       <div class="order-tab">task_tab2</div>
       <div class="order-tab">task_tab3</div>
       <div class="order-tab">task_tab4</div>
     </div>
-
     <div style="padding: 0;">
       <div id="activeOrderContainer"></div>
       <button id="btnConfirmOrder" class="btn-order-action hidden" onclick="checkPointsBeforeConfirm()">task_tj</button>
-      
-      <div id="completedOrderContainer">
-        <!-- Rendered via JS -->
-      </div>
+      <div id="completedOrderContainer"></div>
     </div>
   </div>
-
-  <!-- ================= PAGE 3: VIP & START TASKS ================= -->
+    <!-- PAGE 3: VIP -->
   <div id="page-vip" class="page hidden">
     <div class="top-header">
       <div class="logo">● </div>
       <div class="bell-icon" onclick="gotoPage('notifications')">🔔<span id="notiBadgeVip" class="bell-badge hidden">0</span></div>
     </div>
-
     <div style="padding: 0 16px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
       <div>
         <div style="font-size: 24px; font-weight: bold; color: #fff;">₱ <span id="vipPageBalance">0</span></div>
@@ -356,32 +305,24 @@
       </div>
       <div style="width: 40px; height: 40px; background: #d4af37; border-radius: 10px; display: flex; justify-content: center; align-items: center; color: #000; font-size: 20px; font-weight: bold;">+</div>
     </div>
-
-    <div class="vip-main-card">
+    <div class="vip-main-card" style="margin-top:20px;">
       <div class="vmc-top">
         <div class="vmc-level" id="vipLevelDisplay">VIP</div>
-        <div class="vmc-bonus">
-          <span class="vmc-bonus-label">Bonus</span>
-          <span id="vipBonusDisplay">₱ 0.00</span>
-        </div>
+        <div class="vmc-bonus"><span class="vmc-bonus-label">Bonus</span><span id="vipBonusDisplay">₱ 0.00</span></div>
       </div>
       <div class="vmc-desc" id="vipCommissionInfo">Komisyon 1% | 5 Order</div>
-      
       <div class="vmc-stats">
         <div class="vmc-stat"><div id="vipTasksCompleted">0</div><label>Tapos na</label></div>
         <div class="vmc-stat"><div id="vipTasksTotal">0</div><label>Lahat</label></div>
         <div class="vmc-stat"><div id="vipTasksRemaining">0</div><label>Kulang</label></div>
       </div>
-      
       <div class="vmc-avail">
         <span id="vipOrderCount">0</span><br>Bilang ng order
         <strong>₱ <span id="vipPageBalance2">0</span></strong>
         Magagamit na balanse
       </div>
-      
       <button class="vmc-start-btn" onclick="startNextTask()">SIMULAN ANG PAGKUHA NG ORDER</button>
     </div>
-
     <div class="vip-rules">
       <h4>MGA TAGUBILIN SA PAGKUMPLETO NG GAWAIN</h4>
       <p>1. Sa loob ng parehong araw, kumpletuhin ang tatlong magkakasunod na gawain upang makakuha ng premyo na nagkakahalaga ng 8,800 TRY ✅ ✅</p>
@@ -390,72 +331,139 @@
     </div>
   </div>
 
-  <!-- ================= PAGE 4: POINT REQUEST ================= -->
+  <!-- PAGE 4: REQUEST -->
   <div id="page-request" class="page hidden">
     <div class="top-header">
       <div class="logo">● POINT REQUEST</div>
       <div class="bell-icon" onclick="gotoPage('notifications')">🔔<span id="notiBadgeRequest" class="bell-badge hidden">0</span></div>
     </div>
-
     <div class="request-page">
       <div class="request-card">
         <h3>Kumpletuhin ang Iyong Kahilingan</h3>
-        
         <label>Pangalan:</label>
         <input id="reqName" type="text" placeholder="Ilagay ang iyong pangalan">
-
         <label>Halaga na Kailangan (₱):</label>
         <input id="reqAmount" type="number" placeholder="Ilagay ang halaga">
-
         <button class="btn-submit" onclick="submitPointRequest()">Isumite ang Kahilingan</button>
       </div>
     </div>
   </div>
 
-  <!-- ================= PAGE 5: WITHDRAW ================= -->
+  <!-- PAGE 5: WITHDRAW -->
   <div id="page-withdraw" class="page hidden">
     <div class="top-header">
       <div class="logo">● MAG-WITHDRAW</div>
       <div class="bell-icon" onclick="gotoPage('notifications')">🔔<span id="notiBadgeWithdraw" class="bell-badge hidden">0</span></div>
     </div>
-
     <div class="withdraw-page">
       <div class="withdraw-card">
         <h3>Mag-withdraw ng Points</h3>
-        
         <label>Pangalan:</label>
         <input id="wdName" type="text" placeholder="Ilagay ang iyong pangalan">
-
         <label>Pangalan ng Bangko (Philippines):</label>
         <input id="wdBank" type="text" placeholder="Halimbawa: BDO, BPI, GCash">
-
         <label>Numero ng Account:</label>
         <input id="wdAccNo" type="text" placeholder="Ilagay ang numero ng account">
-
         <label>Halaga na Gustong I-withdraw (₱):</label>
         <input id="wdAmount" type="number" placeholder="Ilagay ang halaga">
-
         <label>Password (Para sa seguridad):</label>
         <input id="wdPass" type="password" placeholder="Ilagay ang iyong password">
-
         <button class="btn-submit" onclick="submitWithdrawal()">Isumite ang Withdrawal</button>
       </div>
     </div>
   </div>
 
-  <!-- ================= PAGE 6: NOTIFICATIONS ================= -->
+  <!-- PAGE 6: NOTIFICATIONS -->
   <div id="page-notifications" class="page hidden">
     <div class="top-header">
       <div class="logo">● MGA ABISO</div>
       <div class="bell-icon" onclick="gotoPage('home')">🔙</div>
     </div>
+    <div class="noti-page" id="notiContainer"></div>
+  </div>
 
-    <div class="noti-page" id="notiContainer">
-      <!-- Rendered via JS -->
+  <!-- PAGE 7: ACCOUNT (HESABIM) -->
+  <div id="page-account" class="page hidden">
+    <div class="top-header">
+      <div class="logo">● HESABIM (ACCOUNT)</div>
+      <div class="bell-icon" onclick="gotoPage('notifications')">🔔<span class="bell-badge hidden">0</span></div>
+    </div>
+    <div class="account-page">
+      <div class="acc-profile-card">
+        <div class="acc-profile-top">
+          <div class="acc-avatar" id="accAvatarLetter">U</div>
+          <div>
+            <div class="acc-profile-name" id="accUserName">-</div>
+            <div class="acc-profile-id" id="accUserId">ID: -</div>
+          </div>
+        </div>
+        <div class="acc-info-row"><span class="acc-info-label">Phone Number</span><span class="acc-info-value" id="accUserPhone">-</span></div>
+        <div class="acc-info-row"><span class="acc-info-label">VIP Level</span><span class="acc-info-value gold" id="accUserVip">VIP</span></div>
+        <div class="acc-info-row"><span class="acc-info-label">Total Main Points</span><span class="acc-info-value gold">₱ <span id="accUserPoints">0</span></span></div>
+      </div>
+      <div class="acc-card">
+        <div class="acc-card-title">Credit Score</div>
+        <div class="acc-credit-score" id="accCreditScore">100</div>
+        <div class="acc-credit-hint" id="accCreditHint">Maayos ang iyong credit score.</div>
+      </div>
+      <div class="acc-menu-item" onclick="gotoPage('request')"><div class="acc-menu-left"><div class="acc-menu-icon">💰</div><div class="acc-menu-text">Point Request</div></div><div class="acc-menu-arrow">›</div></div>
+      <div class="acc-menu-item" onclick="gotoPage('request-record')"><div class="acc-menu-left"><div class="acc-menu-icon">📄</div><div class="acc-menu-text">Point Request Record</div></div><div class="acc-menu-arrow">›</div></div>
+      <div class="acc-menu-item" onclick="gotoPage('withdraw')"><div class="acc-menu-left"><div class="acc-menu-icon">💸</div><div class="acc-menu-text">Withdraw Request</div></div><div class="acc-menu-arrow">›</div></div>
+      <div class="acc-menu-item" onclick="gotoPage('withdraw-record')"><div class="acc-menu-left"><div class="acc-menu-icon">📄</div><div class="acc-menu-text">Withdraw Request Record</div></div><div class="acc-menu-arrow">›</div></div>
+      <div class="acc-menu-item" onclick="gotoPage('settings')"><div class="acc-menu-left"><div class="acc-menu-icon">⚙️</div><div class="acc-menu-text">Settings</div></div><div class="acc-menu-arrow">›</div></div>
+      <button class="acc-logout-btn" onclick="logout()">LOGOUT</button>
     </div>
   </div>
 
-  <!-- Bottom Navigation -->
+  <!-- PAGE 8: POINT REQUEST RECORD -->
+  <div id="page-request-record" class="page hidden">
+    <div class="top-header">
+      <div class="logo">● POINT REQUEST RECORD</div>
+      <div class="bell-icon" onclick="gotoPage('account')">🔙</div>
+    </div>
+    <div class="record-page" id="pointRecordContainer"></div>
+  </div>
+
+  <!-- PAGE 9: WITHDRAW RECORD -->
+  <div id="page-withdraw-record" class="page hidden">
+    <div class="top-header">
+      <div class="logo">● WITHDRAW RECORD</div>
+      <div class="bell-icon" onclick="gotoPage('account')">🔙</div>
+    </div>
+    <div class="record-page" id="withdrawRecordContainer"></div>
+  </div>
+
+  <!-- PAGE 10: SETTINGS -->
+  <div id="page-settings" class="page hidden">
+    <div class="top-header">
+      <div class="logo">● SETTINGS</div>
+      <div class="bell-icon" onclick="gotoPage('account')">🔙</div>
+    </div>
+    <div class="settings-page">
+      <div class="settings-card">
+        <h4>Language / Wika</h4>
+        <div class="lang-toggle">
+          <button class="lang-btn active" id="btnLangFil" onclick="changeLanguage('fil')">Filipino</button>
+          <button class="lang-btn" id="btnLangEng" onclick="changeLanguage('en')">English</button>
+        </div>
+      </div>
+      <div class="settings-card">
+        <h4>Change Username</h4>
+        <label>New Username:</label>
+        <input id="setNewName" type="text" placeholder="Enter new name">
+        <button class="settings-btn" onclick="submitChangeName()">Save Username</button>
+      </div>
+      <div class="settings-card">
+        <h4>Change Password</h4>
+        <label>Old Password:</label>
+        <input id="setOldPass" type="password" placeholder="Enter old password">
+        <label>New Password:</label>
+        <input id="setNewPass" type="password" placeholder="Enter new password">
+        <button class="settings-btn" onclick="submitChangePassword()">Save Password</button>
+      </div>
+    </div>
+  </div>
+    <!-- BOTTOM NAV -->
   <div class="bottom-nav">
     <div class="nav-item" onclick="gotoPage('home')" id="nav-home">
       <div class="nav-icon">🏠</div><div class="nav-text">ANA SAYFA</div>
@@ -463,26 +471,25 @@
     <div class="nav-item" onclick="gotoPage('orders')" id="nav-orders">
       <div class="nav-icon">🧾</div><div class="nav-text">SIPARISLER</div>
     </div>
-    <div class="nav-item active" onclick="gotoPage('vip')" id="nav-vip">
+    <div class="nav-item" onclick="gotoPage('vip')" id="nav-vip">
       <div class="nav-icon">⚖️</div><div class="nav-text">SIPARIS AL</div>
     </div>
     <div class="nav-item" onclick="gotoPage('notifications')" id="nav-support">
       <div class="nav-icon">🎧</div><div class="nav-text">MGA ABISO</div>
     </div>
-    <div class="nav-item" onclick="showToast('Account coming soon')" id="nav-account">
+    <div class="nav-item" onclick="gotoPage('account')" id="nav-account">
       <div class="nav-icon">👤</div><div class="nav-text">HESABIM</div>
     </div>
   </div>
 </div>
 
-<!-- Modal for Confirming Order (NEW) -->
+<!-- MODAL: ORDER CONFIRM -->
 <div id="orderConfirmModal" class="modal-overlay hidden">
   <div class="modal-content">
     <div class="modal-header">
       <div class="modal-title">taks_ddtjz</div>
       <button class="close-btn" onclick="closeOrderModal()">✕</button>
     </div>
-    
     <div class="modal-item">
       <img id="omImg" src="" alt="">
       <div class="modal-item-info">
@@ -490,19 +497,15 @@
         <div>task_index_num: <span id="omIndex">...</span></div>
       </div>
     </div>
-
     <div class="modal-row"><span>presyo</span> <span>₱ <span id="omPrice">0</span></span></div>
     <div class="modal-row"><span>bilang ng produkto</span> <span>1</span></div>
     <div class="modal-row"><span>kabuuang halaga</span> <span>₱ <span id="omTotal">0</span></span></div>
-    
     <div class="modal-total">
       <div>komisyon (Random)</div>
       <div class="row2">₱ <span id="omComm">0</span></div>
     </div>
-
     <div class="modal-row" style="margin-top: 15px;"><span>PIN ng order</span> <span></span></div>
     <input type="password" placeholder="pin1" style="width:100%; padding:12px; background:#1f1f1f; border:1px solid #333; border-radius:8px; color:#fff; margin-top:5px;">
-
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeOrderModal()">TASK_OX</button>
       <button class="btn-confirm" onclick="submitOrder()">TASK_TJ</button>
@@ -510,48 +513,27 @@
   </div>
 </div>
 
-<!-- ===== Custom Warning Modal (Exactly like the image) ===== -->
+<!-- MODAL: INSUFFICIENT POINTS -->
 <div id="insufficientModal" class="custom-alert hidden">
   <div class="warning-box">
     <div class="warning-header">
-      <div class="warning-icon-wrapper">
-        <span class="warning-icon">⚠️</span>
-      </div>
+      <div class="warning-icon-wrapper"><span class="warning-icon">⚠️</span></div>
       <h3 class="warning-title">Mahal na customer</h3>
       <p class="warning-subtitle">Isang bihirang abiso ng sistema</p>
     </div>
-    
     <div class="warning-body">
       <div class="data-group">
-        <div class="data-row">
-          <span class="data-label">Dami ng Produkto</span>
-          <span class="data-value" id="infoReqPoints">₱0.00</span>
-        </div>
-        <div class="data-row">
-          <span class="data-label">Natitirang balanse</span>
-          <span class="data-value" id="infoCurrentPoints">₱0.00</span>
-        </div>
+        <div class="data-row"><span class="data-label">Dami ng Produkto</span><span class="data-value" id="infoReqPoints">₱0.00</span></div>
+        <div class="data-row"><span class="data-label">Natitirang balanse</span><span class="data-value" id="infoCurrentPoints">₱0.00</span></div>
       </div>
-
       <div class="data-group" style="margin-top: 20px;">
-        <div class="data-row">
-          <span class="data-label" style="color: #fca5a5;">Kinakailangang halaga</span>
-          <span class="data-value danger" id="infoMissingPoints">₱0.00</span>
-        </div>
+        <div class="data-row"><span class="data-label" style="color: #fca5a5;">Kinakailangang halaga</span><span class="data-value danger" id="infoMissingPoints">₱0.00</span></div>
       </div>
-
       <div class="data-group" style="margin-top: 20px;">
-        <div class="data-row">
-          <span class="data-label">Halaga ng komisyon</span>
-          <span class="data-value highlight" id="infoCommission">₱0.00</span>
-        </div>
-        <div class="data-row">
-          <span class="data-label">Kabuuang suma</span>
-          <span class="data-value highlight" id="infoTotalPoints">₱0.00</span>
-        </div>
+        <div class="data-row"><span class="data-label">Halaga ng komisyon</span><span class="data-value highlight" id="infoCommission">₱0.00</span></div>
+        <div class="data-row"><span class="data-label">Kabuuang suma</span><span class="data-value highlight" id="infoTotalPoints">₱0.00</span></div>
       </div>
     </div>
-
     <div class="warning-footer">
       <button class="warning-btn" onclick="goToPointRequest()">OK, Mag-request ng Points</button>
     </div>
@@ -559,60 +541,65 @@
 </div>
 
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbwM0fTSH3KilMBaRBTbdmHDyVN_EZxL7YdIEbhkXPbZMk2FZPFpnAZpK9pI2EyQ-JqM/exec'; // ⚠️ သင့် URL ထည့်ပါ
+// ================== အပိုင်း (၇) မှ စတင်၍ JS ရေးပါမည် ==================
+  const API_URL = 'https://script.google.com/macros/s/AKfycbwM0fTSH3KilMBaRBTbdmHDyVN_EZxL7YdIEbhkXPbZMk2FZPFpnAZpK9pI2EyQ-JqM/exec'; // ⚠️ သင့် URL ထည့်ပါ
 let CURRENT_USER = null;
 let AUTO_REFRESH_INTERVAL = null;
 let CURRENT_TASK_DATA = null;
 let MISSING_AMOUNT = 0;
 let MISSING_TOTAL_POINTS = 0;
 let UNREAD_NOTI_COUNT = 0;
-
 const LS_KEY = 'userSession';
 const SESSION_HOURS = 18;
 
-// ================== Loader ==================
+const I18N = {
+  fil: { home:"ANA SAYFA", orders:"SIPARISLER", vip:"SIPARIS AL", noti:"MGA ABISO", account:"HESABIM" },
+  en:  { home:"HOME", orders:"ORDERS", vip:"START TASKS", noti:"NOTIFICATIONS", account:"ACCOUNT" }
+};
+let currentLang = localStorage.getItem('appLang') || 'fil';
+
+function applyLanguage() {
+  const dict = I18N[currentLang];
+  document.querySelectorAll('.nav-text').forEach((el, i) => {
+    const keys = ['home', 'orders', 'vip', 'noti', 'account'];
+    el.textContent = dict[keys[i]];
+  });
+  document.getElementById('btnLangFil').classList.toggle('active', currentLang === 'fil');
+  document.getElementById('btnLangEng').classList.toggle('active', currentLang === 'en');
+}
+function changeLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('appLang', lang);
+  applyLanguage();
+}
+
 function toggleLoader(show) { document.getElementById('pageLoader').classList.toggle('hidden', !show); }
 
-// ================== Custom Toast Notification ==================
 function showToast(message, isError = false) {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
   toast.className = 'toast' + (isError ? ' error' : '');
   toast.textContent = message;
-  
   container.appendChild(toast);
   setTimeout(() => toast.classList.add('show'), 10);
-  
-  setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
-  }, 3000);
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
 }
 
-// ================== Session ==================
-function saveSession(userData) {
-  localStorage.setItem(LS_KEY, JSON.stringify({ data: userData, expiresAt: Date.now() + SESSION_HOURS * 60 * 60 * 1000 }));
-}
+function saveSession(userData) { localStorage.setItem(LS_KEY, JSON.stringify({ data: userData, expiresAt: Date.now() + SESSION_HOURS * 60 * 60 * 1000 })); }
 function loadSession() {
   try {
-    const raw = localStorage.getItem(LS_KEY);
-    if (!raw) return null;
-    const s = JSON.parse(raw);
-    if (!s.data || !s.expiresAt) return null;
-    if (Date.now() >= s.expiresAt) { localStorage.removeItem(LS_KEY); return null; }
+    const raw = localStorage.getItem(LS_KEY); if (!raw) return null;
+    const s = JSON.parse(raw); if (!s.data || !s.expiresAt || Date.now() >= s.expiresAt) { localStorage.removeItem(LS_KEY); return null; }
     return s.data;
   } catch (e) { localStorage.removeItem(LS_KEY); return null; }
 }
 function clearSession() { localStorage.removeItem(LS_KEY); }
 
-// ================== API ==================
 async function api(action, payload) {
   const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(Object.assign({ action }, payload)) });
   return await res.json();
 }
-function msg(el, text, ok) { const e = document.getElementById(el); e.textContent = text; e.className = 'msg ' + (ok ? 'ok' : 'err'); }
 
-// ================== Auth ==================
 function showLogin() { document.getElementById('registerBox').classList.add('hidden'); document.getElementById('loginBox').classList.remove('hidden'); }
 function showRegister() { document.getElementById('loginBox').classList.add('hidden'); document.getElementById('registerBox').classList.remove('hidden'); }
 
@@ -623,13 +610,8 @@ async function doRegister() {
   toggleLoader(false);
   if(r.ok) {
     showToast('Matagumpay ang pagpaparehistro! Mangyaring mag-login.');
-    setTimeout(() => {
-      document.getElementById('lPhone').value = data.phone;
-      showLogin();
-    }, 1500);
-  } else {
-    showToast(r.msg, true);
-  }
+    setTimeout(() => { document.getElementById('lPhone').value = data.phone; showLogin(); }, 1500);
+  } else { showToast(r.msg, true); }
 }
 
 async function doLogin() {
@@ -639,18 +621,16 @@ async function doLogin() {
   const r = await api('login', { phone, password });
   toggleLoader(false);
   if (r.ok) {
-    CURRENT_USER = { userId: r.userId, name: r.name, phone: phone, points: r.points, vipLevel: r.vipLevel };
+    CURRENT_USER = { userId: r.userId, name: r.name, phone: phone, points: r.points, vipLevel: r.vipLevel, creditScore: r.creditScore };
     saveSession(CURRENT_USER);
     enterApp();
-  } else {
-    showToast(r.msg, true);
-  }
+  } else { showToast(r.msg, true); }
 }
-
-// ================== Navigation ==================
+  // ================== Navigation ==================
 function enterApp() {
   document.getElementById('authWrap').classList.add('hidden');
   document.getElementById('appWrap').classList.remove('hidden');
+  applyLanguage();
   fetchLatestData();
   startAutoRefresh();
   gotoPage('home');
@@ -659,21 +639,25 @@ function enterApp() {
 function gotoPage(pageName) {
   toggleLoader(true);
   document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-  document.getElementById('page-' + pageName).classList.remove('hidden');
+  const targetPage = document.getElementById('page-' + pageName);
+  if(targetPage) targetPage.classList.remove('hidden');
 
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   if(pageName === 'home') document.getElementById('nav-home').classList.add('active');
   else if(pageName === 'orders') document.getElementById('nav-orders').classList.add('active');
   else if(pageName === 'vip') document.getElementById('nav-vip').classList.add('active');
-  else if(pageName === 'request') document.getElementById('nav-vip').classList.add('active');
-  else if(pageName === 'withdraw') document.getElementById('nav-vip').classList.add('active');
   else if(pageName === 'notifications') document.getElementById('nav-support').classList.add('active');
+  else if(pageName === 'account') document.getElementById('nav-account').classList.add('active');
 
-  if (pageName === 'notifications') {
-    fetchNotifications();
+  if (pageName === 'notifications') fetchNotifications();
+  if (pageName === 'account') updateAccountUI();
+  if (pageName === 'request-record') fetchPointRecords();
+  if (pageName === 'withdraw-record') fetchWithdrawRecords();
+  if (pageName === 'settings') {
+      document.getElementById('setNewName').value = CURRENT_USER.name;
   }
 
-  setTimeout(() => { toggleLoader(false); }, 400); 
+  setTimeout(() => { toggleLoader(false); }, 300); 
 }
 
 // ================== Data Sync ==================
@@ -691,6 +675,8 @@ async function fetchLatestData() {
     CURRENT_USER.nextTaskReqPoints = r.nextTaskReqPoints;
     CURRENT_USER.totalCommission = r.totalCommission;
     CURRENT_USER.currentTaskCommission = r.currentTaskCommission || 0;
+    CURRENT_USER.creditScore = r.creditScore; 
+    if(r.name) CURRENT_USER.name = r.name;
 
     saveSession(CURRENT_USER);
     updateUI();
@@ -699,21 +685,13 @@ async function fetchLatestData() {
   }
 }
 
-// ⭐ Helper function to calculate VIP stats based on level
 function calculateVipStats(vipLevel, totalCommission) {
-  let commPercent = 1;
-  let totalOrders = 5;
-  
+  let commPercent = 1, totalOrders = 5;
   const levelStr = String(vipLevel).toUpperCase();
-  
   if (levelStr === 'VIP - 1') { commPercent = 2; totalOrders = 10; }
   else if (levelStr === 'VIP - 2') { commPercent = 3; totalOrders = 18; }
   else if (levelStr === 'VIP - 3') { commPercent = 4; totalOrders = 24; }
-  // You can add more levels here if needed
-  
-  const bonusAmount = totalCommission || 0;
-  
-  return { commPercent, totalOrders, bonusAmount };
+  return { commPercent, totalOrders, bonusAmount: totalCommission || 0 };
 }
 
 function updateUI() {
@@ -723,11 +701,9 @@ function updateUI() {
   document.getElementById('homeComm').textContent = '₱ ' + (CURRENT_USER.totalCommission || 0);
   document.getElementById('homeGain').textContent = '₱ ' + (CURRENT_USER.totalCommission || 0);
   document.getElementById('homeEarn').textContent = '₱ ' + (CURRENT_USER.totalCommission || 0);
-
   document.getElementById('gainCommDisplay').textContent = '₱ ' + (CURRENT_USER.totalCommission || 0);
   document.getElementById('gainTotalDisplay').textContent = '₱ ' + (CURRENT_USER.totalCommission || 0);
   
-  // Frozen Amount Display
   if (CURRENT_USER.frozenPoints > 0) {
     document.getElementById('frozenDisplay').classList.remove('hidden');
     document.getElementById('homeFrozen').textContent = CURRENT_USER.frozenPoints;
@@ -735,27 +711,42 @@ function updateUI() {
     document.getElementById('frozenDisplay').classList.add('hidden');
   }
 
-  // VIP Page - Dynamic Update
+  // VIP Page
   const stats = calculateVipStats(CURRENT_USER.vipLevel, CURRENT_USER.totalCommission);
-  
   document.getElementById('vipLevelDisplay').textContent = CURRENT_USER.vipLevel;
   document.getElementById('vipBonusDisplay').textContent = '₱ ' + stats.bonusAmount.toFixed(2);
   document.getElementById('vipCommissionInfo').textContent = `Komisyon ${stats.commPercent}% | ${stats.totalOrders} Order`;
-  
   document.getElementById('vipPageBalance').textContent = CURRENT_USER.points;
   document.getElementById('vipPageBalance2').textContent = CURRENT_USER.points;
-  
-  // Task Counts
   document.getElementById('vipTasksCompleted').textContent = CURRENT_USER.tasksCompleted;
   document.getElementById('vipTasksTotal').textContent = stats.totalOrders;
   document.getElementById('vipTasksRemaining').textContent = CURRENT_USER.tasksRemaining;
   document.getElementById('vipOrderCount').textContent = CURRENT_USER.tasksCompleted;
 
-  // Render Orders
   renderOrders();
 }
 
-// ================== Page 2: Orders Logic ==================
+// ================== Account UI ==================
+function updateAccountUI() {
+  if (!CURRENT_USER) return;
+  document.getElementById('accAvatarLetter').textContent = CURRENT_USER.name.charAt(0).toUpperCase();
+  document.getElementById('accUserName').textContent = CURRENT_USER.name;
+  document.getElementById('accUserId').textContent = 'ID: ' + CURRENT_USER.userId;
+  document.getElementById('accUserPhone').textContent = CURRENT_USER.phone;
+  document.getElementById('accUserVip').textContent = CURRENT_USER.vipLevel;
+  document.getElementById('accUserPoints').textContent = CURRENT_USER.points;
+  document.getElementById('accCreditScore').textContent = CURRENT_USER.creditScore || 100;
+
+  const hint = document.getElementById('accCreditHint');
+  if (Number(CURRENT_USER.creditScore) < 90) {
+      hint.textContent = "Credit score is below 90. Withdrawal is blocked.";
+      hint.className = "acc-credit-hint bad";
+  } else {
+      hint.textContent = "Your credit score is healthy.";
+      hint.className = "acc-credit-hint ok";
+  }
+}
+  // ================== Orders Logic ==================
 async function renderOrders() {
   const container = document.getElementById('activeOrderContainer');
   const btnConfirm = document.getElementById('btnConfirmOrder');
@@ -764,7 +755,6 @@ async function renderOrders() {
     const r = await api('getUserData', { userId: CURRENT_USER.userId }); 
     if (r && r.ok) {
       const randomPrice = Math.floor(Math.random() * 900) + 100; 
-      
       CURRENT_TASK_DATA = {
         price: randomPrice, 
         comm: r.currentTaskCommission, 
@@ -772,7 +762,6 @@ async function renderOrders() {
         id: '#ORD-UB2610281544523157',
         img: r.currentTaskImage
       };
-      
       container.innerHTML = `
         <div class="order-card" onclick="checkPointsBeforeConfirm()">
           <img src="${CURRENT_TASK_DATA.img}" class="order-img">
@@ -805,7 +794,6 @@ async function fetchCompletedTasks() {
       container.innerHTML = '<p style="text-align:center; color:#888; padding:20px;">Wala pang natapos na order.</p>';
       return;
     }
-
     r.list.forEach((t) => {
       const div = document.createElement('div');
       div.className = 'order-card';
@@ -823,24 +811,20 @@ async function fetchCompletedTasks() {
   }
 }
 
-// ⭐ Updated function to check points and show detailed popup
 function checkPointsBeforeConfirm() {
   if (CURRENT_USER.points < CURRENT_USER.nextTaskReqPoints) {
     const reqPoints = Number(CURRENT_USER.nextTaskReqPoints) || 0;
     const currentPoints = Number(CURRENT_USER.points) || 0;
     const commission = Number(CURRENT_TASK_DATA.comm) || 0;
-    
     const missing = reqPoints - currentPoints;
     const totalReturn = missing + commission;
 
-    // Update Modal UI with proper formatting
     document.getElementById('infoReqPoints').textContent = '₱ ' + reqPoints.toFixed(2);
     document.getElementById('infoCurrentPoints').textContent = '₱ ' + currentPoints.toFixed(2);
     document.getElementById('infoMissingPoints').textContent = '₱ ' + missing.toFixed(2);
     document.getElementById('infoCommission').textContent = '₱ ' + commission.toFixed(2);
     document.getElementById('infoTotalPoints').textContent = '₱ ' + totalReturn.toFixed(2);
 
-    // Save for Request Page
     MISSING_AMOUNT = missing;
     MISSING_TOTAL_POINTS = totalReturn;
 
@@ -853,13 +837,14 @@ function checkPointsBeforeConfirm() {
 function showOrderModal() {
   document.getElementById('omImg').src = CURRENT_TASK_DATA.img;
   document.getElementById('omTitle').textContent = CURRENT_TASK_DATA.title;
-  document.getElementById('omIndex').textContent = CURRENT_USER.currentTaskIndex;
+  document.getElementById('omIndex').textContent = CURRENT_USER.currentTaskIndex || 1;
   document.getElementById('omPrice').textContent = CURRENT_TASK_DATA.price;
   document.getElementById('omTotal').textContent = CURRENT_TASK_DATA.price;
   document.getElementById('omComm').textContent = CURRENT_TASK_DATA.comm;
   document.getElementById('orderConfirmModal').classList.remove('hidden');
 }
 function closeOrderModal() { document.getElementById('orderConfirmModal').classList.add('hidden'); }
+function closeInsufficientModal() { document.getElementById('insufficientModal').classList.add('hidden'); }
 
 async function submitOrder() {
   closeOrderModal();
@@ -870,17 +855,14 @@ async function submitOrder() {
     showToast('Nakumpleto ang gawain! Kumita ng: ₱' + r.earned); 
     fetchLatestData();
     gotoPage('vip');
-  } else {
-    showToast(r.msg, true);
-  }
+  } else { showToast(r.msg, true); }
 }
 
-// ================== Page 3: VIP Logic ==================
+// ================== VIP Task Start ==================
 async function startNextTask() {
   toggleLoader(true);
   const r = await api('startTask', { userId: CURRENT_USER.userId });
   toggleLoader(false);
-  
   if (r.ok) {
     showToast('Matagumpay na nasimulan ang gawain!');
     fetchLatestData();
@@ -889,9 +871,7 @@ async function startNextTask() {
     if (r.msg.includes("You already have a task in progress")) {
       showToast("Mauna mong tapusin ang kasalukuyang order.", true);
       gotoPage('orders');
-    } else {
-      showToast(r.msg, true);
-    }
+    } else { showToast(r.msg, true); }
   }
 }
 
@@ -902,40 +882,20 @@ function goToPointRequest() {
   gotoPage('request');
 }
 
-function closeInsufficientModal() { 
-  document.getElementById('insufficientModal').classList.add('hidden'); 
-}
-
-// ================== Page 4: Point Request Logic ==================
+// ================== Submits (Request / Withdraw / Settings) ==================
 async function submitPointRequest() {
   const name = document.getElementById('reqName').value.trim();
   const amount = parseFloat(document.getElementById('reqAmount').value);
-
-  if (!name || isNaN(amount) || amount <= 0) {
-    showToast('Mangyaring punan ang lahat ng field nang tama.', true);
-    return;
-  }
-
+  if (!name || isNaN(amount) || amount <= 0) { showToast('Mangyaring punan ang lahat ng field nang tama.', true); return; }
   toggleLoader(true);
-  const r = await api('submitPointRequest', {
-    userId: CURRENT_USER.userId,
-    name: name,
-    phone: CURRENT_USER.phone,
-    amount: amount
-  });
+  const r = await api('submitPointRequest', { userId: CURRENT_USER.userId, name: name, phone: CURRENT_USER.phone, amount: amount });
   toggleLoader(false);
-
   if (r.ok) {
-    showToast('Matagumpay na naisumite ang kahilingan! Hintayin ang approval ng admin.');
-    setTimeout(() => {
-        gotoPage('vip'); 
-    }, 2000);
-  } else {
-    showToast(r.msg, true);
-  }
+    showToast('Matagumpay na naisumite ang kahilingan!');
+    setTimeout(() => { gotoPage('vip'); }, 2000);
+  } else { showToast(r.msg, true); }
 }
 
-// ================== Page 5: Withdraw Logic ==================
 async function submitWithdrawal() {
   const name = document.getElementById('wdName').value.trim();
   const bank = document.getElementById('wdBank').value.trim();
@@ -943,64 +903,127 @@ async function submitWithdrawal() {
   const amount = parseFloat(document.getElementById('wdAmount').value);
   const pass = document.getElementById('wdPass').value;
 
-  if (!name || !bank || !accNo || isNaN(amount) || amount <= 0 || !pass) {
-    showToast('Mangyaring punan ang lahat ng field nang tama.', true);
-    return;
-  }
-
-  // Check if task is in progress (Frontend validation)
-  if (CURRENT_USER.tasksInProgress > 0) {
-    showToast('Hindi ka makakapag-withdraw habang may gawaing isinasagawa.', true);
-    return;
-  }
+  if (!name || !bank || !accNo || isNaN(amount) || amount <= 0 || !pass) { showToast('Mangyaring punan ang lahat ng field nang tama.', true); return; }
+  if (CURRENT_USER.tasksInProgress > 0) { showToast('Hindi ka makakapag-withdraw habang may gawaing isinasagawa.', true); return; }
 
   toggleLoader(true);
-  const r = await api('submitWithdrawal', {
-    userId: CURRENT_USER.userId,
-    realName: name,
-    bankName: bank,
-    accountNo: accNo,
-    points: amount,
-    password: pass
-  });
+  const r = await api('submitWithdrawal', { userId: CURRENT_USER.userId, realName: name, bankName: bank, accountNo: accNo, points: amount, password: pass });
   toggleLoader(false);
 
   if (r.ok) {
-    showToast(r.msg);
-    setTimeout(() => {
-        gotoPage('home'); 
-    }, 2000);
+    showToast(r.msg); setTimeout(() => { gotoPage('home'); }, 2000);
   } else {
-    showToast(r.msg, true);
+    if (r.code === 'LOW_CREDIT') {
+      showToast(`Withdrawal blocked. Credit score is ${r.creditScore} (must be ≥ 90).`, true);
+    } else { showToast(r.msg, true); }
   }
 }
 
-// ================== Page 6: Notifications Logic ==================
+async function submitChangeName() {
+  const newName = document.getElementById('setNewName').value.trim();
+  if(!newName) return showToast("Enter new name", true);
+  toggleLoader(true);
+  const r = await api('changeUserName', { userId: CURRENT_USER.userId, newName: newName });
+  toggleLoader(false);
+  if(r.ok) { showToast(r.msg); CURRENT_USER.name = newName; saveSession(CURRENT_USER); updateAccountUI(); }
+  else showToast(r.msg, true);
+}
+
+async function submitChangePassword() {
+  const oldPass = document.getElementById('setOldPass').value;
+  const newPass = document.getElementById('setNewPass').value;
+  if(!oldPass || !newPass) return showToast("Fill all fields", true);
+  toggleLoader(true);
+  const r = await api('changeUserPassword', { userId: CURRENT_USER.userId, oldPassword: oldPass, newPassword: newPass });
+  toggleLoader(false);
+  if(r.ok) { showToast(r.msg); document.getElementById('setOldPass').value = ''; document.getElementById('setNewPass').value = ''; }
+  else showToast(r.msg, true);
+}
+  // ================== Records Fetching ==================
+async function fetchPointRecords() {
+  const container = document.getElementById('pointRecordContainer');
+  container.innerHTML = '<p style="text-align:center;">Loading...</p>';
+  const r = await api('getMyPointRequests', { userId: CURRENT_USER.userId });
+  
+  container.innerHTML = '';
+  if (r && r.ok) {
+    if (r.list.length === 0) {
+      container.innerHTML = '<div class="record-empty">Wala pang record ng point request.</div>';
+      return;
+    }
+    r.list.forEach(req => {
+      let statusClass = req.status.toLowerCase();
+      let dateStr = req.createdAt ? req.createdAt.split(' ')[0] : '';
+      container.innerHTML += `
+        <div class="record-card">
+          <div class="record-top">
+            <div class="record-code">${req.reqCode}</div>
+            <div class="record-status ${statusClass}">${req.status}</div>
+          </div>
+          <div class="record-detail">Halaga: <b>₱ ${req.amount}</b></div>
+          <div class="record-detail">Petsa: <b>${dateStr}</b></div>
+        </div>
+      `;
+    });
+  } else {
+    container.innerHTML = '<div class="record-empty">Error loading records.</div>';
+  }
+}
+
+async function fetchWithdrawRecords() {
+  const container = document.getElementById('withdrawRecordContainer');
+  container.innerHTML = '<p style="text-align:center;">Loading...</p>';
+  const r = await api('getMyWithdrawals', { userId: CURRENT_USER.userId });
+  
+  container.innerHTML = '';
+  if (r && r.ok) {
+    if (r.list.length === 0) {
+      container.innerHTML = '<div class="record-empty">Wala pang record ng withdraw.</div>';
+      return;
+    }
+    r.list.forEach(w => {
+      let statusClass = w.status.toLowerCase();
+      let dateStr = w.createdAt ? w.createdAt.split(' ')[0] : '';
+      let reasonHtml = w.reason ? `<div class="record-detail" style="color:#ef4444;">Dahilan: <b>${w.reason}</b></div>` : '';
+      container.innerHTML += `
+        <div class="record-card">
+          <div class="record-top">
+            <div class="record-code">${w.reqCode}</div>
+            <div class="record-status ${statusClass}">${w.status}</div>
+          </div>
+          <div class="record-detail">Halaga: <b>₱ ${w.points}</b></div>
+          <div class="record-detail">Bank: <b>${w.bankName}</b> (${w.accountNo})</div>
+          <div class="record-detail">Petsa: <b>${dateStr}</b></div>
+          ${reasonHtml}
+        </div>
+      `;
+    });
+  } else {
+    container.innerHTML = '<div class="record-empty">Error loading records.</div>';
+  }
+}
+
+// ================== Notifications ==================
 async function fetchNotificationsCount() {
   const r = await api('getNotifications', { userId: CURRENT_USER.userId });
   if (r && r.ok) {
     UNREAD_NOTI_COUNT = r.list.length; 
-    updateNotificationBadges();
+    const badges = document.querySelectorAll('.bell-badge');
+    badges.forEach(badge => {
+      if (UNREAD_NOTI_COUNT > 0) {
+        badge.textContent = UNREAD_NOTI_COUNT;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    });
   }
-}
-
-function updateNotificationBadges() {
-  const badges = document.querySelectorAll('.bell-badge');
-  badges.forEach(badge => {
-    if (UNREAD_NOTI_COUNT > 0) {
-      badge.textContent = UNREAD_NOTI_COUNT;
-      badge.classList.remove('hidden');
-    } else {
-      badge.classList.add('hidden');
-    }
-  });
 }
 
 async function fetchNotifications() {
   toggleLoader(true);
   const r = await api('getNotifications', { userId: CURRENT_USER.userId });
   toggleLoader(false);
-  
   const container = document.getElementById('notiContainer');
   container.innerHTML = '';
 
@@ -1009,7 +1032,6 @@ async function fetchNotifications() {
       container.innerHTML = '<p style="text-align:center; color:#888; padding:20px;">Wala kang abiso sa ngayon.</p>';
       return;
     }
-
     r.list.forEach(n => {
       const div = document.createElement('div');
       div.className = 'noti-card';
@@ -1025,7 +1047,7 @@ async function fetchNotifications() {
   }
 }
 
-// ================== Auto Refresh & Utils ==================
+// ================== Auto Refresh / Logout / Init ==================
 function startAutoRefresh() {
   if (AUTO_REFRESH_INTERVAL) clearInterval(AUTO_REFRESH_INTERVAL);
   AUTO_REFRESH_INTERVAL = setInterval(fetchLatestData, 10000);
