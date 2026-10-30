@@ -14,7 +14,7 @@
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
   
-  /* ⭐ Premium Gold & Black Background */
+  /* Premium Background */
   html, body { 
     margin: 0; padding: 0; 
     background-color: var(--bg-color);
@@ -87,6 +87,7 @@
   .gain-card { background: #141414; border: 1px solid #2a2a2a; border-radius: 12px; padding: 15px; }
   .gain-card label { display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 5px; }
   .gain-card div { font-size: 16px; font-weight: bold; color: var(--gold); }
+  
   .order-tabs { display: flex; gap: 10px; overflow-x: auto; padding: 10px 16px 15px; }
   .order-tab { padding: 8px 16px; border-radius: 20px; font-size: 12px; white-space: nowrap; border: 1px solid var(--card-border); background: transparent; color: var(--text-muted); cursor: pointer; }
   .order-tab.active { background: var(--gold); color: #000; border-color: var(--gold); font-weight: bold; }
@@ -99,6 +100,7 @@
   .order-status { font-size: 11px; display: flex; align-items: center; gap: 5px; margin-top: 5px; color: var(--text-muted); }
   .dot { width: 6px; height: 6px; border-radius: 50%; background: #00d2ff; }
   .btn-order-action { width: calc(100% - 32px); margin: 0 16px 20px; padding: 12px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; }
+  
   .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; justify-content: center; align-items: center; padding: 20px; }
   .modal-content { background: #141414; width: 100%; max-width: 400px; border-radius: 20px; padding: 20px; border: 1px solid #2a2a2a; }
   .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #2a2a2a; padding-bottom: 10px; }
@@ -114,6 +116,7 @@
   .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
   .btn-cancel { flex: 1; padding: 12px; background: #2a2a2a; color: #fff; border: none; border-radius: 10px; font-weight: bold; }
   .btn-confirm { flex: 2; padding: 12px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; }
+  
   .vip-main-card { margin: 0 16px; background: var(--card-bg); border: 1px solid #332a12; border-radius: 16px; padding: 20px; }
   .vmc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
   .vmc-level { font-size: 20px; font-weight: bold; color: var(--gold); }
@@ -130,6 +133,7 @@
   .vip-rules h4 { margin: 0 0 10px; font-size: 12px; color: var(--text-muted); text-transform: uppercase; }
   .vip-rules p { font-size: 11px; color: #aaa; line-height: 1.6; margin: 0 0 10px; }
   .vip-rules p:last-child { margin-bottom: 0; }
+  
   .request-page, .withdraw-page { padding: 20px 16px; }
   .request-card, .withdraw-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 20px; }
   .request-card h3, .withdraw-card h3 { margin: 0 0 15px; font-size: 18px; color: var(--gold); text-align: center; }
@@ -235,6 +239,8 @@
     <div class="input-group"><input id="rPhone" placeholder="Numero ng Telepono" inputmode="tel"></div>
     <div class="input-group"><input id="rPass" type="password" placeholder="Password"></div>
     <div class="input-group"><input id="rRepass" type="password" placeholder="Kumpirmahin ang Password"></div>
+    <!-- ⭐ Referral Code အကွက်အသစ် -->
+    <div class="input-group"><input id="rRefCode" placeholder="Referral Code (Optional)" style="text-transform: uppercase;"></div>
     <button class="btn-primary" onclick="doRegister()">Magrehistro</button>
     <div id="rMsg" class="msg"></div>
     <p class="auth-link">May account na? <a href="#" onclick="showLogin();return false;">Mag-login</a></p>
@@ -405,7 +411,7 @@
     <div class="noti-page" id="notiContainer"></div>
   </div>
 
-  <!-- PAGE 7: ACCOUNT (HESABIM) -->
+  <!-- PAGE 7: ACCOUNT (HESABIM) with Referral -->
   <div id="page-account" class="page hidden">
     <div class="top-header">
       <div class="logo">● HESABIM (ACCOUNT)</div>
@@ -429,6 +435,17 @@
         <div class="acc-credit-score" id="accCreditScore">100</div>
         <div class="acc-credit-hint" id="accCreditHint">Maayos ang iyong credit score.</div>
       </div>
+      
+      <!-- ⭐ Referral Card အသစ် -->
+      <div class="acc-card" style="background: linear-gradient(145deg, #1c1a15, #0f0f0f); border-color: #332a12;">
+        <div class="acc-card-title" style="color: var(--gold);">Referral Code (မိတ်ဆွေခေါ်ယူရေး)</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+          <div style="font-size: 20px; font-weight: bold; color: #fff; letter-spacing: 1px;" id="accRefCode">-</div>
+          <button onclick="copyRefCode()" style="padding: 8px 16px; background: var(--gold); color: #000; border: none; border-radius: 8px; font-weight: bold; font-size: 12px;">Copy</button>
+        </div>
+        <div style="font-size: 11px; color: #888; margin-top: 10px;">သင့်ကုဒ်ကို သူငယ်ချင်းများကို မျှဝေပါ။ သူတို့စာရင်းသွင်းပါက Bonus Points ရရှိမည်။</div>
+      </div>
+
       <div class="acc-menu-item" onclick="gotoPage('request')"><div class="acc-menu-left"><div class="acc-menu-icon">💰</div><div class="acc-menu-text">Point Request</div></div><div class="acc-menu-arrow">›</div></div>
       <div class="acc-menu-item" onclick="gotoPage('request-record')"><div class="acc-menu-left"><div class="acc-menu-icon">📄</div><div class="acc-menu-text">Point Request Record</div></div><div class="acc-menu-arrow">›</div></div>
       <div class="acc-menu-item" onclick="gotoPage('withdraw')"><div class="acc-menu-left"><div class="acc-menu-icon">💸</div><div class="acc-menu-text">Withdraw Request</div></div><div class="acc-menu-arrow">›</div></div>
@@ -564,8 +581,7 @@
 </div>
 
 <script>
-// ================== အပိုင်း (၇) မှ စတင်၍ JS ရေးပါမည် ==================
-  const API_URL = 'https://script.google.com/macros/s/AKfycbwM0fTSH3KilMBaRBTbdmHDyVN_EZxL7YdIEbhkXPbZMk2FZPFpnAZpK9pI2EyQ-JqM/exec'; // ⚠️ သင့် URL ထည့်ပါ
+const API_URL = 'https://script.google.com/macros/s/AKfycbwM0fTSH3KilMBaRBTbdmHDyVN_EZxL7YdIEbhkXPbZMk2FZPFpnAZpK9pI2EyQ-JqM/exec'; // ⚠️ သင့် URL ထည့်ပါ
 let CURRENT_USER = null;
 let AUTO_REFRESH_INTERVAL = null;
 let CURRENT_TASK_DATA = null;
@@ -575,6 +591,7 @@ let UNREAD_NOTI_COUNT = 0;
 const LS_KEY = 'userSession';
 const SESSION_HOURS = 18;
 
+// Language Config
 const I18N = {
   fil: { home:"ANA SAYFA", orders:"SIPARISLER", vip:"SIPARIS AL", noti:"MGA ABISO", account:"HESABIM" },
   en:  { home:"HOME", orders:"ORDERS", vip:"START TASKS", noti:"NOTIFICATIONS", account:"ACCOUNT" }
@@ -628,7 +645,14 @@ function showRegister() { document.getElementById('loginBox').classList.add('hid
 
 async function doRegister() {
   toggleLoader(true);
-  const data = { name: document.getElementById('rName').value, phone: document.getElementById('rPhone').value, password: document.getElementById('rPass').value, repassword: document.getElementById('rRepass').value, device: 'Mobile' };
+  const data = { 
+    name: document.getElementById('rName').value, 
+    phone: document.getElementById('rPhone').value, 
+    password: document.getElementById('rPass').value, 
+    repassword: document.getElementById('rRepass').value, 
+    refCode: document.getElementById('rRefCode').value, // ⭐ Referral Code
+    device: 'Mobile' 
+  };
   const r = await api('register', data);
   toggleLoader(false);
   if(r.ok) {
@@ -699,6 +723,7 @@ async function fetchLatestData() {
     CURRENT_USER.totalCommission = r.totalCommission;
     CURRENT_USER.currentTaskCommission = r.currentTaskCommission || 0;
     CURRENT_USER.creditScore = r.creditScore; 
+    CURRENT_USER.refCode = r.refCode; // ⭐ Referral
     if(r.name) CURRENT_USER.name = r.name;
 
     saveSession(CURRENT_USER);
@@ -718,7 +743,6 @@ function calculateVipStats(vipLevel, totalCommission) {
 }
 
 function updateUI() {
-  // Home
   document.getElementById('homeBalance').textContent = CURRENT_USER.points;
   document.getElementById('vipBadge').textContent = CURRENT_USER.vipLevel;
   document.getElementById('homeComm').textContent = '₱ ' + (CURRENT_USER.totalCommission || 0);
@@ -734,7 +758,6 @@ function updateUI() {
     document.getElementById('frozenDisplay').classList.add('hidden');
   }
 
-  // VIP Page
   const stats = calculateVipStats(CURRENT_USER.vipLevel, CURRENT_USER.totalCommission);
   document.getElementById('vipLevelDisplay').textContent = CURRENT_USER.vipLevel;
   document.getElementById('vipBonusDisplay').textContent = '₱ ' + stats.bonusAmount.toFixed(2);
@@ -749,7 +772,7 @@ function updateUI() {
   renderOrders();
 }
 
-// ================== Account UI ==================
+// ================== Account UI (with Referral) ==================
 function updateAccountUI() {
   if (!CURRENT_USER) return;
   document.getElementById('accAvatarLetter').textContent = CURRENT_USER.name.charAt(0).toUpperCase();
@@ -768,6 +791,30 @@ function updateAccountUI() {
       hint.textContent = "Your credit score is healthy.";
       hint.className = "acc-credit-hint ok";
   }
+
+  // ⭐ Referral Code ပြသခြင်း
+  if (CURRENT_USER.refCode) {
+    document.getElementById('accRefCode').textContent = CURRENT_USER.refCode;
+  } else {
+    api('getMyReferralCode', { userId: CURRENT_USER.userId }).then(res => {
+        if(res.ok) {
+            CURRENT_USER.refCode = res.refCode;
+            document.getElementById('accRefCode').textContent = res.refCode;
+        }
+    });
+  }
+}
+
+// ⭐ Referral Code Copy Function
+function copyRefCode() {
+  const code = document.getElementById('accRefCode').textContent;
+  if (code === '-' || !code) return;
+  
+  navigator.clipboard.writeText(code).then(() => {
+    showToast('Referral code copied!');
+  }).catch(err => {
+    showToast('Failed to copy', true);
+  });
 }
   // ================== Orders Logic ==================
 async function renderOrders() {
@@ -869,8 +916,12 @@ function showOrderModal() {
 function closeOrderModal() { document.getElementById('orderConfirmModal').classList.add('hidden'); }
 function closeInsufficientModal() { document.getElementById('insufficientModal').classList.add('hidden'); }
 
+// ⭐ Confirm Box ထည့်ထားသည်
 async function submitOrder() {
   closeOrderModal();
+  if (!confirm('သေချာပြီလား? ဒီ Order ကို အတည်ပြုမှာလား?')) {
+    return;
+  }
   toggleLoader(true);
   const r = await api('completeTask', { userId: CURRENT_USER.userId });
   toggleLoader(false);
@@ -905,7 +956,7 @@ function goToPointRequest() {
   gotoPage('request');
 }
 
-// ================== Submits (Request / Withdraw / Settings) ==================
+// ================== Submits (Request / Withdraw) ==================
 async function submitPointRequest() {
   const name = document.getElementById('reqName').value.trim();
   const amount = parseFloat(document.getElementById('reqAmount').value);
@@ -941,14 +992,19 @@ async function submitWithdrawal() {
     } else { showToast(r.msg, true); }
   }
 }
-
+  // ================== Settings Submits ==================
 async function submitChangeName() {
   const newName = document.getElementById('setNewName').value.trim();
   if(!newName) return showToast("Enter new name", true);
   toggleLoader(true);
   const r = await api('changeUserName', { userId: CURRENT_USER.userId, newName: newName });
   toggleLoader(false);
-  if(r.ok) { showToast(r.msg); CURRENT_USER.name = newName; saveSession(CURRENT_USER); updateAccountUI(); }
+  if(r.ok) { 
+    showToast(r.msg); 
+    CURRENT_USER.name = newName; 
+    saveSession(CURRENT_USER); 
+    updateAccountUI(); 
+  }
   else showToast(r.msg, true);
 }
 
@@ -959,10 +1015,15 @@ async function submitChangePassword() {
   toggleLoader(true);
   const r = await api('changeUserPassword', { userId: CURRENT_USER.userId, oldPassword: oldPass, newPassword: newPass });
   toggleLoader(false);
-  if(r.ok) { showToast(r.msg); document.getElementById('setOldPass').value = ''; document.getElementById('setNewPass').value = ''; }
+  if(r.ok) { 
+    showToast(r.msg); 
+    document.getElementById('setOldPass').value = ''; 
+    document.getElementById('setNewPass').value = ''; 
+  }
   else showToast(r.msg, true);
 }
-  // ================== Records Fetching ==================
+
+// ================== Records Fetching ==================
 async function fetchPointRecords() {
   const container = document.getElementById('pointRecordContainer');
   container.innerHTML = '<p style="text-align:center;">Loading...</p>';
@@ -1069,8 +1130,7 @@ async function fetchNotifications() {
     container.innerHTML = '<p style="text-align:center; color:#888; padding:20px;">Error loading notifications.</p>';
   }
 }
-
-// ================== Auto Refresh / Logout / Init ==================
+  // ================== Auto Refresh / Logout / Init ==================
 function startAutoRefresh() {
   if (AUTO_REFRESH_INTERVAL) clearInterval(AUTO_REFRESH_INTERVAL);
   AUTO_REFRESH_INTERVAL = setInterval(fetchLatestData, 10000);
