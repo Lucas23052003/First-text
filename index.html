@@ -145,11 +145,13 @@
   .noti-title { font-size: 14px; font-weight: bold; color: var(--gold); margin-bottom: 5px; }
   .noti-msg { font-size: 13px; color: #ccc; line-height: 1.5; }
   .noti-date { font-size: 10px; color: var(--text-muted); margin-top: 8px; text-align: right; }
+  
   .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(17, 17, 17, 0.95); backdrop-filter: blur(10px); border-top: 1px solid #2a2a2a; display: flex; justify-content: space-around; padding: 10px 0 15px; z-index: 999; }
   .nav-item { display: flex; flex-direction: column; align-items: center; color: #666; cursor: pointer; gap: 4px; }
   .nav-item.active { color: var(--gold); }
   .nav-icon { font-size: 20px; }
   .nav-text { font-size: 10px; font-weight: bold; }
+  
   .custom-alert { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px; }
   .warning-box { background: #141414; border-radius: 24px; width: 100%; max-width: 360px; padding: 0; box-shadow: 0 20px 50px rgba(0,0,0,0.8); overflow: hidden; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid #333; }
   @keyframes slideUp { 0% { transform: translateY(50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
@@ -217,6 +219,17 @@
   .lang-toggle { display: flex; gap: 10px; }
   .lang-btn { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid var(--card-border); background: var(--input-bg); color: #fff; font-size: 13px; font-weight: bold; cursor: pointer; }
   .lang-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
+
+  /* ===== SUPPORT CHAT ===== */
+  .support-page { padding: 16px; display: flex; flex-direction: column; height: calc(100vh - 160px); }
+  .chat-box { flex: 1; border: 1px solid var(--card-border); background: var(--card-bg); border-radius: 16px; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; margin-bottom: 10px; }
+  .chat-msg { margin-bottom: 10px; padding: 10px 14px; border-radius: 12px; max-width: 80%; font-size: 13px; line-height: 1.4; }
+  .chat-msg.user { background: #2a2a2a; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .chat-msg.admin { background: var(--gold); color: #000; align-self: flex-start; border-bottom-left-radius: 4px; }
+  .chat-time { font-size: 9px; opacity: 0.6; margin-top: 4px; text-align: right; }
+  .chat-input-box { display: flex; gap: 10px; }
+  .chat-input-box input { flex: 1; padding: 14px; border-radius: 12px; border: 1px solid var(--card-border); background: var(--input-bg); color: #fff; outline: none; }
+  .chat-send-btn { padding: 0 20px; background: var(--gold); color: #000; border: none; border-radius: 12px; font-weight: bold; font-size: 14px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -239,7 +252,7 @@
     <div class="input-group"><input id="rPhone" placeholder="Numero ng Telepono" inputmode="tel"></div>
     <div class="input-group"><input id="rPass" type="password" placeholder="Password"></div>
     <div class="input-group"><input id="rRepass" type="password" placeholder="Kumpirmahin ang Password"></div>
-    <!-- ⭐ Referral Code အကွက်အသစ် -->
+    <!-- Referral Code -->
     <div class="input-group"><input id="rRefCode" placeholder="Referral Code (Optional)" style="text-transform: uppercase;"></div>
     <button class="btn-primary" onclick="doRegister()">Magrehistro</button>
     <div id="rMsg" class="msg"></div>
@@ -288,7 +301,7 @@
     <div class="qa-grid">
       <div class="qa-card" onclick="gotoPage('request')"><div class="qa-icon">💰</div><div class="qa-text">Mag-request</div></div>
       <div class="qa-card" onclick="gotoPage('withdraw')"><div class="qa-icon">💸</div><div class="qa-text">Mag-withdraw</div></div>
-      <div class="qa-card" onclick="showToast('Customer Service coming soon')"><div class="qa-icon">🎧</div><div class="qa-text">Serbisyo sa Customer</div></div>
+      <div class="qa-card" onclick="gotoPage('support')"><div class="qa-icon">🎧</div><div class="qa-text">Customer Service</div></div>
       <div class="qa-card" onclick="gotoPage('notifications')"><div class="qa-icon">🔔</div><div class="qa-text">Abiso ng System</div></div>
     </div>
 
@@ -411,7 +424,7 @@
     <div class="noti-page" id="notiContainer"></div>
   </div>
 
-  <!-- PAGE 7: ACCOUNT (HESABIM) with Referral -->
+  <!-- PAGE 7: ACCOUNT -->
   <div id="page-account" class="page hidden">
     <div class="top-header">
       <div class="logo">● HESABIM (ACCOUNT)</div>
@@ -435,50 +448,37 @@
         <div class="acc-credit-score" id="accCreditScore">100</div>
         <div class="acc-credit-hint" id="accCreditHint">Maayos ang iyong credit score.</div>
       </div>
-      
-      <!-- ⭐ Referral Card အသစ် -->
       <div class="acc-card" style="background: linear-gradient(145deg, #1c1a15, #0f0f0f); border-color: #332a12;">
-        <div class="acc-card-title" style="color: var(--gold);">Referral Code (မိတ်ဆွေခေါ်ယူရေး)</div>
+        <div class="acc-card-title" style="color: var(--gold);">Referral Code</div>
         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
           <div style="font-size: 20px; font-weight: bold; color: #fff; letter-spacing: 1px;" id="accRefCode">-</div>
           <button onclick="copyRefCode()" style="padding: 8px 16px; background: var(--gold); color: #000; border: none; border-radius: 8px; font-weight: bold; font-size: 12px;">Copy</button>
         </div>
-        <div style="font-size: 11px; color: #888; margin-top: 10px;">သင့်ကုဒ်ကို သူငယ်ချင်းများကို မျှဝေပါ။ သူတို့စာရင်းသွင်းပါက Bonus Points ရရှိမည်။</div>
       </div>
 
-      <div class="acc-menu-item" onclick="gotoPage('request')"><div class="acc-menu-left"><div class="acc-menu-icon">💰</div><div class="acc-menu-text">Point Request</div></div><div class="acc-menu-arrow">›</div></div>
+      <div class="acc-menu-item" onclick="gotoPage('support')"><div class="acc-menu-left"><div class="acc-menu-icon">🎧</div><div class="acc-menu-text">Customer Support</div></div><div class="acc-menu-arrow">›</div></div>
       <div class="acc-menu-item" onclick="gotoPage('request-record')"><div class="acc-menu-left"><div class="acc-menu-icon">📄</div><div class="acc-menu-text">Point Request Record</div></div><div class="acc-menu-arrow">›</div></div>
-      <div class="acc-menu-item" onclick="gotoPage('withdraw')"><div class="acc-menu-left"><div class="acc-menu-icon">💸</div><div class="acc-menu-text">Withdraw Request</div></div><div class="acc-menu-arrow">›</div></div>
       <div class="acc-menu-item" onclick="gotoPage('withdraw-record')"><div class="acc-menu-left"><div class="acc-menu-icon">📄</div><div class="acc-menu-text">Withdraw Request Record</div></div><div class="acc-menu-arrow">›</div></div>
       <div class="acc-menu-item" onclick="gotoPage('settings')"><div class="acc-menu-left"><div class="acc-menu-icon">⚙️</div><div class="acc-menu-text">Settings</div></div><div class="acc-menu-arrow">›</div></div>
       <button class="acc-logout-btn" onclick="logout()">LOGOUT</button>
     </div>
   </div>
 
-  <!-- PAGE 8: POINT REQUEST RECORD -->
+  <!-- PAGE 8: POINT RECORD -->
   <div id="page-request-record" class="page hidden">
-    <div class="top-header">
-      <div class="logo">● POINT REQUEST RECORD</div>
-      <div class="bell-icon" onclick="gotoPage('account')">🔙</div>
-    </div>
+    <div class="top-header"><div class="logo">● POINT RECORD</div><div class="bell-icon" onclick="gotoPage('account')">🔙</div></div>
     <div class="record-page" id="pointRecordContainer"></div>
   </div>
 
   <!-- PAGE 9: WITHDRAW RECORD -->
   <div id="page-withdraw-record" class="page hidden">
-    <div class="top-header">
-      <div class="logo">● WITHDRAW RECORD</div>
-      <div class="bell-icon" onclick="gotoPage('account')">🔙</div>
-    </div>
+    <div class="top-header"><div class="logo">● WITHDRAW RECORD</div><div class="bell-icon" onclick="gotoPage('account')">🔙</div></div>
     <div class="record-page" id="withdrawRecordContainer"></div>
   </div>
 
   <!-- PAGE 10: SETTINGS -->
   <div id="page-settings" class="page hidden">
-    <div class="top-header">
-      <div class="logo">● SETTINGS</div>
-      <div class="bell-icon" onclick="gotoPage('account')">🔙</div>
-    </div>
+    <div class="top-header"><div class="logo">● SETTINGS</div><div class="bell-icon" onclick="gotoPage('account')">🔙</div></div>
     <div class="settings-page">
       <div class="settings-card">
         <h4>Language / Wika</h4>
@@ -500,6 +500,18 @@
         <label>New Password:</label>
         <input id="setNewPass" type="password" placeholder="Enter new password">
         <button class="settings-btn" onclick="submitChangePassword()">Save Password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 11: SUPPORT CHAT -->
+  <div id="page-support" class="page hidden">
+    <div class="top-header"><div class="logo">● CUSTOMER SERVICE</div><div class="bell-icon" onclick="gotoPage('home')">🔙</div></div>
+    <div class="support-page">
+      <div class="chat-box" id="userChatBox"></div>
+      <div class="chat-input-box">
+        <input id="userChatInput" type="text" placeholder="Type your message...">
+        <button class="chat-send-btn" onclick="sendUserChat()">Send</button>
       </div>
     </div>
   </div>
@@ -591,7 +603,6 @@ let UNREAD_NOTI_COUNT = 0;
 const LS_KEY = 'userSession';
 const SESSION_HOURS = 18;
 
-// Language Config
 const I18N = {
   fil: { home:"ANA SAYFA", orders:"SIPARISLER", vip:"SIPARIS AL", noti:"MGA ABISO", account:"HESABIM" },
   en:  { home:"HOME", orders:"ORDERS", vip:"START TASKS", noti:"NOTIFICATIONS", account:"ACCOUNT" }
@@ -608,9 +619,7 @@ function applyLanguage() {
   document.getElementById('btnLangEng').classList.toggle('active', currentLang === 'en');
 }
 function changeLanguage(lang) {
-  currentLang = lang;
-  localStorage.setItem('appLang', lang);
-  applyLanguage();
+  currentLang = lang; localStorage.setItem('appLang', lang); applyLanguage();
 }
 
 function toggleLoader(show) { document.getElementById('pageLoader').classList.toggle('hidden', !show); }
@@ -650,7 +659,7 @@ async function doRegister() {
     phone: document.getElementById('rPhone').value, 
     password: document.getElementById('rPass').value, 
     repassword: document.getElementById('rRepass').value, 
-    refCode: document.getElementById('rRefCode').value, // ⭐ Referral Code
+    refCode: document.getElementById('rRefCode').value,
     device: 'Mobile' 
   };
   const r = await api('register', data);
@@ -703,6 +712,7 @@ function gotoPage(pageName) {
   if (pageName === 'settings') {
       document.getElementById('setNewName').value = CURRENT_USER.name;
   }
+  if (pageName === 'support') loadUserChat();
 
   setTimeout(() => { toggleLoader(false); }, 300); 
 }
@@ -723,7 +733,7 @@ async function fetchLatestData() {
     CURRENT_USER.totalCommission = r.totalCommission;
     CURRENT_USER.currentTaskCommission = r.currentTaskCommission || 0;
     CURRENT_USER.creditScore = r.creditScore; 
-    CURRENT_USER.refCode = r.refCode; // ⭐ Referral
+    CURRENT_USER.refCode = r.refCode;
     if(r.name) CURRENT_USER.name = r.name;
 
     saveSession(CURRENT_USER);
@@ -743,6 +753,7 @@ function calculateVipStats(vipLevel, totalCommission) {
 }
 
 function updateUI() {
+  // Home
   document.getElementById('homeBalance').textContent = CURRENT_USER.points;
   document.getElementById('vipBadge').textContent = CURRENT_USER.vipLevel;
   document.getElementById('homeComm').textContent = '₱ ' + (CURRENT_USER.totalCommission || 0);
@@ -758,6 +769,7 @@ function updateUI() {
     document.getElementById('frozenDisplay').classList.add('hidden');
   }
 
+  // VIP Page
   const stats = calculateVipStats(CURRENT_USER.vipLevel, CURRENT_USER.totalCommission);
   document.getElementById('vipLevelDisplay').textContent = CURRENT_USER.vipLevel;
   document.getElementById('vipBonusDisplay').textContent = '₱ ' + stats.bonusAmount.toFixed(2);
@@ -772,7 +784,7 @@ function updateUI() {
   renderOrders();
 }
 
-// ================== Account UI (with Referral) ==================
+// ================== Account UI ==================
 function updateAccountUI() {
   if (!CURRENT_USER) return;
   document.getElementById('accAvatarLetter').textContent = CURRENT_USER.name.charAt(0).toUpperCase();
@@ -792,7 +804,6 @@ function updateAccountUI() {
       hint.className = "acc-credit-hint ok";
   }
 
-  // ⭐ Referral Code ပြသခြင်း
   if (CURRENT_USER.refCode) {
     document.getElementById('accRefCode').textContent = CURRENT_USER.refCode;
   } else {
@@ -805,16 +816,53 @@ function updateAccountUI() {
   }
 }
 
-// ⭐ Referral Code Copy Function
 function copyRefCode() {
   const code = document.getElementById('accRefCode').textContent;
   if (code === '-' || !code) return;
-  
   navigator.clipboard.writeText(code).then(() => {
     showToast('Referral code copied!');
   }).catch(err => {
     showToast('Failed to copy', true);
   });
+}
+
+// ================== Support Chat (User Side) ==================
+async function loadUserChat() {
+  const chatBox = document.getElementById('userChatBox');
+  chatBox.innerHTML = '<p style="text-align:center; color:#888;">Loading messages...</p>';
+  
+  const r = await api('getSupportMessages', { userId: CURRENT_USER.userId });
+  chatBox.innerHTML = '';
+  
+  if (r && r.ok && r.list.length > 0) {
+    r.list.forEach(msg => {
+      let msgClass = msg.sender === 'USER' ? 'user' : 'admin';
+      let timeStr = msg.timestamp ? msg.timestamp.split(' ')[1] : '';
+      chatBox.innerHTML += `
+        <div class="chat-msg ${msgClass}">
+          ${msg.message}
+          <div class="chat-time">${timeStr}</div>
+        </div>
+      `;
+    });
+    chatBox.scrollTop = chatBox.scrollHeight; 
+  } else {
+    chatBox.innerHTML = '<p style="text-align:center; color:#888;">Wala pang mensahe. Magtanong sa admin kung may problema.</p>';
+  }
+}
+
+async function sendUserChat() {
+  const input = document.getElementById('userChatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  
+  input.value = '';
+  const r = await api('sendSupportMessage', { userId: CURRENT_USER.userId, message: msg });
+  if (r.ok) {
+    loadUserChat();
+  } else {
+    showToast(r.msg, true);
+  }
 }
   // ================== Orders Logic ==================
 async function renderOrders() {
@@ -916,7 +964,6 @@ function showOrderModal() {
 function closeOrderModal() { document.getElementById('orderConfirmModal').classList.add('hidden'); }
 function closeInsufficientModal() { document.getElementById('insufficientModal').classList.add('hidden'); }
 
-// ⭐ Confirm Box ထည့်ထားသည်
 async function submitOrder() {
   closeOrderModal();
   if (!confirm('သေချာပြီလား? ဒီ Order ကို အတည်ပြုမှာလား?')) {
@@ -1130,7 +1177,8 @@ async function fetchNotifications() {
     container.innerHTML = '<p style="text-align:center; color:#888; padding:20px;">Error loading notifications.</p>';
   }
 }
-  // ================== Auto Refresh / Logout / Init ==================
+
+// ================== Auto Refresh / Logout / Init ==================
 function startAutoRefresh() {
   if (AUTO_REFRESH_INTERVAL) clearInterval(AUTO_REFRESH_INTERVAL);
   AUTO_REFRESH_INTERVAL = setInterval(fetchLatestData, 10000);
