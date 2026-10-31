@@ -5,6 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CommaGo</title>
 <style>
+
+      /* ===== TASK REMINDER BANNER ===== */
+  .task-reminder {
+    background: rgba(255, 215, 0, 0.15); /* အဝါရောင် ဖျော့ဖျော့ */
+    border: 1px solid var(--lime);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+  }
+  .task-reminder-text { font-size: 13px; color: #fff; font-weight: bold; }
+  .task-reminder-btn { background: var(--lime); color: #000; border: none; padding: 6px 12px; border-radius: 8px; font-weight: bold; font-size: 12px; cursor: pointer; }
+
+  /* ===== RECENT ACTIVITY ===== */
+  .recent-activity-card {
+    margin: 16px;
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    padding: 16px;
+  }
+  .activity-title { font-size: 14px; font-weight: bold; color: var(--lime); margin-bottom: 12px; }
+  .activity-list { list-style: none; padding: 0; margin: 0; }
+  .activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px dashed #2a2a2a;
+  }
+  .activity-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .activity-icon { font-size: 16px; }
+  .activity-details { flex: 1; }
+  .activity-text { font-size: 13px; color: #ccc; line-height: 1.4; }
+  .activity-time { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+    
     :root { 
     --bg-color: #0a0a0a; 
     --card-bg: #141414; 
@@ -343,6 +387,10 @@
         <button class="hbc-btn hbc-btn-dark" onclick="gotoPage('request')">📥 Mag-request</button>
         <button class="hbc-btn hbc-btn-dark" onclick="gotoPage('withdraw')">💸 Mag-withdraw</button>
       </div>
+        <div id="taskReminderBanner" class="task-reminder hidden">
+      <div class="task-reminder-text">⚠️ သင့်မှာ မပြီးသေးတဲ့ Order တစ်ခု ရှိနေပါတယ်။</div>
+      <button class="task-reminder-btn" onclick="gotoPage('orders')">သွားမယ်</button>
+    </div>
     </div>
 
     <div class="section-header">
@@ -365,6 +413,13 @@
       <div class="gain-card"><label>Kita</label><div id="gainTotalDisplay">₱ 0</div></div>
     </div>
   </div>
+        <!-- ⭐ Recent Activity -->
+    <div class="recent-activity-card">
+      <div class="activity-title">📋 Recent Activity</div>
+      <ul class="activity-list" id="recentActivityList">
+        <li class="activity-item"><div class="activity-text" style="color:#888;">Loading activities...</div></li>
+      </ul>
+    </div>
 
   <!-- PAGE 2: ORDERS -->
   <div id="page-orders" class="page hidden">
